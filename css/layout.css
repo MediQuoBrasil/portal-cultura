@@ -1,0 +1,387 @@
+/* ═══════════════════════════════════════════════════════════
+   Layout: telas, login, topo, menu móvel, hero, grade bento
+   ═══════════════════════════════════════════════════════════ */
+
+.container {
+  width: 100%;
+  max-width: var(--largura-container);
+  margin-inline: auto;
+  padding-inline: var(--e-5);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-inline: var(--e-8);
+  }
+}
+
+.tela {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ─── Tela inicial (verificando sessão) ──────────────────── */
+
+.tela--inicial {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--e-3);
+  color: var(--texto-mudo);
+  font-size: var(--fs-pequeno);
+}
+
+/* ─── Barra superior compartilhada ───────────────────────── */
+
+.barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-4);
+  height: var(--altura-topo);
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-2);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--texto);
+}
+
+.marca:hover {
+  text-decoration: none;
+}
+
+.marca__simbolo {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.marca__secao {
+  color: var(--texto-mudo);
+  font-weight: 500;
+}
+
+/* Ícones do botão de tema: lua no escuro, sol no claro (padrão ui.js) */
+.icone-sol { display: none; }
+[data-theme="light"] .icone-lua { display: none; }
+[data-theme="light"] .icone-sol { display: block; }
+
+/* ─── Login ──────────────────────────────────────────────── */
+
+.tela--login {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.login {
+  display: grid;
+  align-items: center;
+  gap: var(--e-10);
+  padding-block: var(--e-12) var(--e-16);
+}
+
+.login__intro {
+  display: grid;
+  gap: var(--e-5);
+  max-width: 38rem;
+}
+
+.login__cartao {
+  display: grid;
+  gap: var(--e-5);
+  width: 100%;
+  max-width: 26rem;
+}
+
+.login__cartao-titulo {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.login__botao-google {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+}
+
+.login__validando {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--e-3);
+  min-height: 44px;
+  color: var(--texto-mudo);
+  font-size: var(--fs-pequeno);
+}
+
+.login__erro {
+  padding: var(--e-3) var(--e-4);
+  font-size: var(--fs-pequeno);
+  line-height: 1.5;
+  color: var(--perigo);
+  background: var(--perigo-suave);
+  border-radius: var(--raio-sm);
+}
+
+.login__nota {
+  font-size: 0.8125rem;
+  color: var(--texto-mudo);
+}
+
+.login__rodape {
+  padding-block: var(--e-6);
+  font-size: 0.8125rem;
+  color: var(--texto-mudo);
+}
+
+@media (min-width: 1024px) {
+  .login {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: var(--e-16);
+    padding-block: var(--e-24);
+  }
+
+  .login__cartao {
+    justify-self: end;
+  }
+}
+
+/* ─── Topo do app (vidro fixo) ───────────────────────────── */
+
+.topo {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--fundo-vidro);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  border-bottom: 1px solid var(--borda);
+}
+
+.topo__menu {
+  display: none;
+}
+
+.topo__painel {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-6);
+  min-width: 0;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--e-1);
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nav::-webkit-scrollbar {
+  display: none;
+}
+
+.topo__acoes {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+  flex-shrink: 0;
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+  padding-right: var(--e-2);
+  min-width: 0;
+}
+
+.usuario__textos {
+  display: grid;
+  line-height: 1.25;
+  min-width: 0;
+}
+
+.usuario__nome {
+  overflow: hidden;
+  font-size: var(--fs-pequeno);
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.usuario__papel {
+  font-size: var(--fs-rotulo);
+  color: var(--texto-mudo);
+}
+
+/* Menu móvel (< 768px): o mesmo painel vira um dropdown com vidro */
+@media (max-width: 767px) {
+  .topo__menu {
+    display: inline-flex;
+  }
+
+  .topo__painel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--e-4);
+    padding: var(--e-4) var(--e-5) var(--e-6);
+    /* Sem backdrop-filter próprio: aninhado ao do .topo, ele só desfocaria o próprio topo,
+       não a página. Por isso o fundo é quase opaco (98%, em vez dos 95% do frontend.md),
+       senão o título grande do hero aparece por trás. */
+    background: var(--fundo-painel-movel);
+    border-bottom: 1px solid var(--borda);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+  }
+
+  .topo__painel[data-aberto="true"] {
+    display: flex;
+    animation: painel-descer var(--t-rapido) var(--curva-expo);
+  }
+
+  .nav {
+    flex-direction: column;
+    align-items: stretch;
+    overflow: visible;
+  }
+
+  .topo__acoes {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding-top: var(--e-4);
+    border-top: 1px solid var(--borda);
+  }
+
+  .topo__acoes .usuario {
+    flex: 1 1 100%;
+  }
+
+  .topo__sair {
+    flex: 1;
+  }
+}
+
+@keyframes painel-descer {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Ícone do botão de menu: hambúrguer ↔ X */
+.topo__menu .icone-fechar { display: none; }
+.topo__menu[aria-expanded="true"] .icone-abrir { display: none; }
+.topo__menu[aria-expanded="true"] .icone-fechar { display: block; }
+
+/* ─── Hero ───────────────────────────────────────────────── */
+
+.hero {
+  display: grid;
+  gap: var(--e-5);
+  padding-block: var(--e-16) var(--e-12);
+  transform-origin: 50% 0;
+  will-change: opacity, transform;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding-block: var(--e-24) var(--e-16);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding-block: var(--e-32) var(--e-16);
+  }
+}
+
+/* ─── Seções ─────────────────────────────────────────────── */
+
+.secao {
+  position: relative;
+  padding-block: var(--e-16);
+}
+
+.secao + .secao::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--divisor);
+}
+
+@media (min-width: 768px) {
+  .secao { padding-block: var(--e-24); }
+}
+
+@media (min-width: 1024px) {
+  .secao { padding-block: var(--e-32); }
+}
+
+.area-pagina {
+  padding-bottom: var(--e-16);
+}
+
+/* ─── Grade bento (assimétrica) ──────────────────────────── */
+/* 1 coluna no celular, 2 no tablet, 6 no desktop com spans variados. */
+
+.bento {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--e-4);
+}
+
+@media (min-width: 768px) {
+  .bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--e-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .bento {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-auto-rows: minmax(180px, auto);
+  }
+
+  .bento__item--2 { grid-column: span 2; }
+  .bento__item--3 { grid-column: span 3; }
+  .bento__item--4 { grid-column: span 4; }
+  .bento__item--6 { grid-column: span 6; }
+  .bento__item--alto { grid-row: span 2; }
+}
+
+/* ─── Rodapé ─────────────────────────────────────────────── */
+
+.rodape {
+  position: relative;
+  z-index: 1;
+  padding-block: var(--e-8);
+  font-size: 0.8125rem;
+  color: var(--texto-mudo);
+  background: linear-gradient(to bottom, transparent, var(--fundo-profundo));
+}
+
+.rodape::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--divisor);
+}

@@ -1,0 +1,313 @@
+/* ═══════════════════════════════════════════════════════════
+   Base: reset, tipografia, camadas de luz ambiente, foco e movimento
+   ═══════════════════════════════════════════════════════════ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-padding-top: calc(var(--altura-topo) + var(--e-4));
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: var(--fonte);
+  font-size: var(--fs-corpo);
+  font-feature-settings: "cv11", "ss01";
+  line-height: 1.65;
+  color: var(--texto);
+  background: var(--fundo-base);
+  background-image: var(--ambiente-base);
+  background-attachment: fixed;
+  transition: background-color var(--t-padrao) ease, color var(--t-padrao) ease;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--acento-texto);
+  text-decoration: none;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+::selection {
+  background: rgba(var(--acento-rgb), 0.35);
+  color: var(--texto);
+}
+
+/* ─── Tipografia ─────────────────────────────────────────── */
+
+.titulo-display,
+.titulo-1,
+.titulo-2,
+.titulo-3 {
+  font-weight: 600;
+  color: var(--texto);
+  text-wrap: balance;
+}
+
+.titulo-display {
+  font-size: var(--fs-display);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+.titulo-1 {
+  font-size: var(--fs-h1);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+
+.titulo-2 {
+  font-size: var(--fs-h2);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.titulo-3 {
+  font-size: var(--fs-h3);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.texto-lead {
+  max-width: var(--largura-texto);
+  font-size: var(--fs-lead);
+  line-height: 1.6;
+  color: var(--texto-mudo);
+}
+
+.texto-mudo {
+  color: var(--texto-mudo);
+}
+
+.texto-pequeno {
+  font-size: var(--fs-pequeno);
+}
+
+.rotulo {
+  display: inline-block;
+  font-family: var(--fonte-mono);
+  font-size: var(--fs-rotulo);
+  letter-spacing: 0.1em;
+  color: var(--texto-mudo);
+}
+
+/* Gradiente vertical para títulos (profundidade) */
+.texto-gradiente {
+  background: linear-gradient(to bottom, var(--titulo-de), var(--titulo-meio) 45%, var(--titulo-ate));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Acento animado — reservado a UMA frase-chave por tela */
+.texto-acento {
+  background: linear-gradient(90deg, var(--acento), var(--acento-reflexo), var(--acento));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: brilho-texto 6s linear infinite;
+}
+
+@keyframes brilho-texto {
+  to { background-position: 200% center; }
+}
+
+/* ─── Luz ambiente (4 camadas) ───────────────────────────── */
+/* Camada 1: gradiente base no body. Camadas 2–4 abaixo.
+   Os blobs usam radial-gradient com queda suave em vez de filter: blur(150px):
+   mesmo efeito visual, sem rasterizar desfoques gigantes a cada quadro (custo alto
+   em GPU de celular). */
+
+.ambiente {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ambiente__blob {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.ambiente__blob--primario {
+  top: -38rem;
+  left: 50%;
+  width: 56rem;
+  height: 87rem;
+  margin-left: -28rem;
+  background: radial-gradient(closest-side, var(--blob-primario), transparent);
+  animation: flutuar 10s ease-in-out infinite;
+}
+
+.ambiente__blob--secundario {
+  top: 18%;
+  left: -18rem;
+  width: 37rem;
+  height: 50rem;
+  background: radial-gradient(closest-side, var(--blob-secundario), transparent);
+  animation: flutuar 9s ease-in-out -3s infinite;
+}
+
+.ambiente__blob--terciario {
+  top: 30%;
+  right: -16rem;
+  width: 31rem;
+  height: 44rem;
+  background: radial-gradient(closest-side, var(--blob-terciario), transparent);
+  animation: flutuar 8s ease-in-out -5s infinite;
+}
+
+.ambiente__blob--inferior {
+  bottom: -22rem;
+  left: 30%;
+  width: 44rem;
+  height: 30rem;
+  background: radial-gradient(closest-side, var(--blob-inferior), transparent);
+  animation: pulsar 8s ease-in-out infinite;
+}
+
+/* Camada 3: ruído (evita banding dos gradientes) */
+.ambiente__ruido {
+  position: absolute;
+  inset: 0;
+  opacity: var(--ruido-opacidade);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Camada 4: grade técnica de 64px, esmaecendo nas bordas */
+.ambiente__grade {
+  position: absolute;
+  inset: 0;
+  opacity: var(--grade-opacidade);
+  background-image:
+    linear-gradient(to right, var(--grade-cor) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grade-cor) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+@keyframes flutuar {
+  0%,
+  100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(1deg); }
+}
+
+@keyframes pulsar {
+  0%,
+  100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+/* ─── Foco e acessibilidade ──────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--anel-foco);
+  outline-offset: 2px;
+}
+
+.pular-conteudo {
+  position: fixed;
+  top: var(--e-3);
+  left: var(--e-3);
+  z-index: 500;
+  padding: var(--e-2) var(--e-4);
+  border-radius: var(--raio-sm);
+  background: var(--fundo-elevado);
+  color: var(--texto);
+  box-shadow: var(--sombra-flutuante);
+  transform: translateY(-200%);
+  transition: transform var(--t-rapido) var(--curva-expo);
+}
+
+.pular-conteudo:focus {
+  transform: translateY(0);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ─── Entrada (revelar ao rolar) ─────────────────────────── */
+/* Só esconde quando o JS de efeitos está ativo: sem JS, o conteúdo aparece. */
+
+.efeitos-ativos [data-revelar] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity var(--t-entrada) var(--curva-expo) var(--atraso, 0ms),
+    transform var(--t-entrada) var(--curva-expo) var(--atraso, 0ms);
+}
+
+.efeitos-ativos [data-revelar].revelado {
+  opacity: 1;
+  transform: none;
+}
+
+/* ─── Movimento reduzido ─────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .ambiente__blob {
+    animation: none !important;
+  }
+
+  .efeitos-ativos [data-revelar] {
+    opacity: 1;
+    transform: none;
+  }
+}
