@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#050506">
+  <title>Portal de Cultura (protótipo) | MediQuo</title>
+  <link rel="icon" href="assets/marca.svg" type="image/svg+xml">
+
+  <!-- Reaproveita o tema salvo do portal (mesma chave pc:tema) antes da primeira pintura -->
+  <script src="js/tema-inicial.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+
+  <!-- Design system do portal (sem alterações) -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/componentes.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <!-- Exclusivo do protótipo: externo porque a CSP do vercel.json bloqueia <style> inline -->
+  <link rel="stylesheet" href="previa/prototipo.css">
+
+  <script type="module" src="previa/app.js"></script>
+</head>
+<body>
+
+  <div class="ambiente" aria-hidden="true">
+    <div class="ambiente__blob ambiente__blob--primario"></div>
+    <div class="ambiente__blob ambiente__blob--secundario"></div>
+    <div class="ambiente__blob ambiente__blob--terciario"></div>
+    <div class="ambiente__blob ambiente__blob--inferior"></div>
+    <div class="ambiente__ruido"></div>
+    <div class="ambiente__grade"></div>
+  </div>
+
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- ═══ Topo ═══ -->
+  <header class="topo">
+    <div class="prot-largura barra">
+      <div class="prot-topo__inicio">
+        <button id="botaoMenu" class="botao botao--fantasma botao--icone prot-topo__menu" type="button"
+                aria-expanded="false" aria-controls="lateral" aria-label="Abrir menu">
+          <svg class="botao__icone icone-abrir" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg class="botao__icone icone-fechar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+        <a class="marca" href="#/inicio">
+          <img class="marca__simbolo" src="assets/marca.svg" alt="" width="24" height="24">
+          MediQuo <span class="marca__secao">Cultura</span>
+        </a>
+        <span class="selo selo--alerta prot-selo-prototipo">Protótipo</span>
+      </div>
+
+      <div class="topo__acoes">
+        <div class="usuario">
+          <span class="avatar" aria-hidden="true">AR</span>
+          <span class="usuario__textos">
+            <span class="usuario__nome">Ana Ribeiro</span>
+            <span class="usuario__papel">Psicologia</span>
+          </span>
+        </div>
+        <button class="botao botao--fantasma botao--icone" type="button" data-acao="alternar-tema" aria-label="Mudar para o tema claro">
+          <svg class="botao__icone icone-lua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="botao__icone icone-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="prot-largura prot-layout">
+
+    <!-- ═══ Navegação lateral (gaveta no celular) ═══ -->
+    <aside id="lateral" class="prot-lateral" data-aberto="false">
+      <nav class="prot-nav" aria-label="Seções do portal">
+        <a class="prot-nav__link" href="#/inicio" data-rota="inicio"><span data-icone="casa"></span>Início</a>
+
+        <p class="prot-nav__grupo">Nossa cultura</p>
+        <a class="prot-nav__link" href="#/cultura" data-rota="cultura"><span data-icone="coracao"></span>Missão, visão e valores</a>
+        <a class="prot-nav__link" href="#/socios" data-rota="socios"><span data-icone="pessoas"></span>Sócios e founders</a>
+        <a class="prot-nav__link" href="#/historia" data-rota="historia"><span data-icone="livro"></span>Nossa história</a>
+        <a class="prot-nav__link" href="#/cases" data-rota="cases"><span data-icone="play"></span>Cases de sucesso</a>
+
+        <p class="prot-nav__grupo">Pessoas</p>
+        <a class="prot-nav__link" href="#/celebracoes" data-rota="celebracoes"><span data-icone="bolo"></span>Aniversários e tempo de casa</a>
+        <a class="prot-nav__link" href="#/artes" data-rota="artes"><span data-icone="brilho"></span>Artes de celebração</a>
+
+        <p class="prot-nav__grupo">Atendimento</p>
+        <a class="prot-nav__link" href="#/protocolos" data-rota="protocolos"><span data-icone="prancheta"></span>Protocolos</a>
+        <a class="prot-nav__link" href="#/boas-praticas" data-rota="boas-praticas"><span data-icone="escudo"></span>Boas práticas em telessaúde</a>
+
+        <p class="prot-nav__grupo">Participe</p>
+        <a class="prot-nav__link" href="#/reunioes" data-rota="reunioes"><span data-icone="calendario"></span>Reuniões individuais</a>
+        <a class="prot-nav__link" href="#/enquete" data-rota="enquete"><span data-icone="enquete"></span>Conheça os sócios</a>
+        <a class="prot-nav__link" href="#/satisfacao" data-rota="satisfacao"><span data-icone="sorriso"></span>Pesquisa de satisfação</a>
+      </nav>
+    </aside>
+    <div id="veuMenu" class="prot-veu" hidden></div>
+
+    <main id="conteudo" class="prot-conteudo" tabindex="-1">
+
+      <!-- ═══ Início ═══ -->
+      <section class="prot-pagina" data-pagina="inicio" aria-labelledby="tInicio">
+        <div class="prot-hero">
+          <p id="saudacao" class="prot-hero__saudacao">Olá, Ana.</p>
+          <h1 id="tInicio" class="titulo-display texto-gradiente" tabindex="-1">Cuidar das pessoas e de quem elas amam.</h1>
+          <p class="texto-lead">
+            Este é o seu espaço na MediQuo: a cultura que guia cada atendimento, as pessoas que fazem parte
+            dela e um canal direto com a liderança.
+          </p>
+        </div>
+
+        <div class="bento">
+          <article class="cartao spotlight bento__item--3 prot-painel">
+            <div class="prot-painel__topo">
+              <h2 class="prot-painel__titulo">Celebrações dos próximos dias</h2>
+              <a href="#/celebracoes" class="texto-pequeno">Ver calendário</a>
+            </div>
+            <ul id="inicioCelebracoes" class="prot-lista-pessoas"></ul>
+          </article>
+
+          <article class="cartao spotlight bento__item--3 prot-painel">
+            <div class="prot-painel__topo">
+              <h2 class="prot-painel__titulo">Sua próxima reunião individual</h2>
+              <a href="#/reunioes" class="texto-pequeno">Ver reuniões</a>
+            </div>
+            <div id="inicioReuniao"></div>
+          </article>
+
+          <a class="cartao cartao--interativo spotlight bento__item--2 prot-atalho" href="#/enquete">
+            <span class="icone-caixa" data-icone="enquete"></span>
+            <span class="prot-atalho__titulo">Conheça o CEO e o COO</span>
+            <span class="texto-mudo texto-pequeno">Enquete aberta: marque os horários em que você pode participar do encontro.</span>
+          </a>
+          <a class="cartao cartao--interativo spotlight bento__item--2 prot-atalho" href="#/satisfacao">
+            <span class="icone-caixa" data-icone="sorriso"></span>
+            <span class="prot-atalho__titulo">Pesquisa de satisfação</span>
+            <span class="texto-mudo texto-pequeno">Cinco perguntas, dois minutos e resposta anônima.</span>
+          </a>
+          <a class="cartao cartao--interativo spotlight bento__item--2 prot-atalho" href="#/cases">
+            <span class="icone-caixa" data-icone="play"></span>
+            <span class="prot-atalho__titulo">Novo case de sucesso</span>
+            <span class="texto-mudo texto-pequeno">Assista a como o cuidado da nossa rede muda a rotina de quem atendemos.</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ═══ Missão, visão e valores ═══ -->
+      <section class="prot-pagina" data-pagina="cultura" aria-labelledby="tCultura" hidden>
+        <header class="prot-cabecalho">
+          <h1 id="tCultura" class="titulo-1 texto-gradiente" tabindex="-1">Missão, visão e valores</h1>
+          <p class="texto-lead">O que nos move, onde queremos chegar e como fazemos isso todos os dias.</p>
+        </header>
+
+        <div class="bento">
+          <article class="cartao cartao--gradiente bento__item--6 prot-proposito">
+            <h2 class="prot-bloco__rotulo">Propósito</h2>
+            <p class="prot-proposito__texto">Tornar o cuidado com a saúde simples e acessível, levando atendimento de qualidade a cada canto do Brasil.</p>
+          </article>
+
+          <article class="cartao spotlight bento__item--3 prot-bloco">
+            <span class="icone-caixa" data-icone="coracao"></span>
+            <h2 class="prot-bloco__rotulo">Missão</h2>
+            <p class="prot-bloco__texto">Cuidar das pessoas e de quem elas amam.</p>
+          </article>
+
+          <article class="cartao spotlight bento__item--3 prot-bloco">
+            <span class="icone-caixa" data-icone="alvo"></span>
+            <h2 class="prot-bloco__rotulo">Visão</h2>
+            <p class="prot-bloco__texto">Ser referência em soluções inovadoras e humanizadas de saúde digital para as famílias e as empresas.</p>
+          </article>
+
+          <article class="cartao spotlight bento__item--6 prot-bloco">
+            <span class="icone-caixa" data-icone="escudo"></span>
+            <h2 class="prot-bloco__rotulo">Valores</h2>
+            <p class="prot-bloco__texto">Respeitamos pessoas e animais, com ética, foco no cliente e inovação para entregar excelência.</p>
+            <ul class="prot-valores" aria-label="Valores em destaque">
+              <li class="selo selo--neutro">Respeito a pessoas e animais</li>
+              <li class="selo selo--neutro">Ética</li>
+              <li class="selo selo--neutro">Foco no cliente</li>
+              <li class="selo selo--neutro">Inovação</li>
+              <li class="selo selo--neutro">Excelência</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══ Sócios e founders ═══ -->
+      <section class="prot-pagina" data-pagina="socios" aria-labelledby="tSocios" hidden>
+        <header class="prot-cabecalho">
+          <h1 id="tSocios" class="titulo-1 texto-gradiente" tabindex="-1">Sócios e founders</h1>
+          <p class="texto-lead">Quem fundou a MediQuo Brasil e lidera a empresa hoje.</p>
+        </header>
+
+        <div class="prot-socios">
+          <article class="cartao spotlight prot-socio">
+            <div class="prot-socio__foto" data-iniciais="VL">
+              <img src="previa/foto-vitor.png" alt="Foto de Vitor Carvalho Laro" width="480" height="600" loading="lazy">
+            </div>
+            <div class="prot-socio__textos">
+              <h2 class="titulo-3">Vitor Carvalho Laro</h2>
+              <p class="selo">CEO, sócio e cofundador</p>
+              <p class="texto-mudo">
+                Vitor é médico com mais de 24 anos de experiência, formado pela Unicamp e com residências no
+                Hospital Sírio-Libanês. Mestre em Inovação Tecnológica e certificado em Transformação Digital na
+                Saúde pelo Hospital Albert Einstein. Apaixonado por democratizar o acesso à saúde de qualidade, é
+                cofundador e CEO da MediQuo Brasil, onde alia tecnologia e cuidado humanizado para transformar vidas.
+              </p>
+            </div>
+          </article>
+
+          <article class="cartao spotlight prot-socio">
+            <div class="prot-socio__foto" data-iniciais="AS">
+              <img src="previa/foto-adalberto.png" alt="Foto de Adalberto Santos" width="480" height="600" loading="lazy">
+            </div>
+            <div class="prot-socio__textos">
+              <h2 class="titulo-3">Adalberto Santos</h2>
+              <p class="selo">COO, sócio e cofundador</p>
+              <p class="texto-mudo">
+                Adalberto é COO, sócio e cofundador da MediQuo Brasil. Graduado em Ciências Contábeis pela FCETM e
+                pós-graduado em Auditoria e Perícia Contábil pela UNIFRAN, possui mais de 50 cursos de extensão como
+                estratégias em Marketing, negociação e gestão empresarial. Apaixonado pelo mundo corporativo, foi
+                Gerente Executivo da afiliada Globo em Uberaba e Região por 24 anos, além de perito contador,
+                professor do curso de Ciências Contábeis da FCETM e na Uniube, no curso de Publicidade e Propaganda.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══ Nossa história (PDF) ═══ -->
+      <section class="prot-pagina" data-pagina="historia" aria-labelledby="tHistoria" hidden>
+        <header class="prot-cabecalho">
+          <h1 id="tHistoria" class="titulo-1 texto-gradiente" tabindex="-1">Nossa história</h1>
+          <p class="texto-lead">Como a MediQuo chegou até aqui, contada pelos próprios sócios.</p>
+        </header>
+
+        <article class="cartao prot-pdf">
+          <div class="prot-pdf__barra">
+            <div class="prot-pdf__navegacao">
+              <button id="pdfAnterior" class="botao botao--secundario botao--icone botao--sm" type="button" aria-label="Página anterior" disabled>
+                <span data-icone="chevron-esquerda"></span>
+              </button>
+              <span id="pdfPagina" class="texto-pequeno texto-mudo" aria-live="polite">Carregando…</span>
+              <button id="pdfProxima" class="botao botao--secundario botao--icone botao--sm" type="button" aria-label="Próxima página" disabled>
+                <span data-icone="chevron-direita"></span>
+              </button>
+            </div>
+            <a class="botao botao--fantasma botao--sm" href="previa/historia.pdf" download>
+              <span data-icone="download"></span><span class="botao__rotulo">Baixar PDF</span>
+            </a>
+          </div>
+          <div id="pdfPalco" class="prot-pdf__palco" tabindex="0" aria-label="Apresentação. Use as setas do teclado para trocar de página.">
+            <span id="pdfEsqueleto" class="esqueleto prot-pdf__esqueleto" aria-hidden="true"></span>
+            <canvas id="pdfCanvas" class="prot-pdf__canvas" hidden></canvas>
+            <p id="pdfErro" class="prot-vazio" role="alert" hidden></p>
+          </div>
+        </article>
+      </section>
+
+      <!-- ═══ Cases de sucesso ═══ -->
+      <section class="prot-pagina" data-pagina="cases" aria-labelledby="tCases" hidden>
+        <header class="prot-cabecalho">
+          <h1 id="tCases" class="titulo-1 texto-gradiente" tabindex="-1">Cases de sucesso</h1>
+          <p class="texto-lead">Histórias reais de quem foi cuidado pela nossa rede de profissionais.</p>
+        </header>
+
+        <div class="bento">
+          <article class="cartao bento__item--4 prot-video">
+            <video id="videoCase" class="prot-video__player" src="previa/case-sucesso.mp4" controls preload="metadata" playsinline></video>
+            <p id="videoErro" class="prot-vazio" role="alert" hidden>
+              O vídeo não carregou. Confira se o arquivo previa/case-sucesso.mp4 foi enviado ao repositório.
+            </p>
+          </article>
+          <article class="cartao bento__item--2 prot-bloco">
+            <span class="selo">Em destaque</span>
+            <h2 class="titulo-3">Case em destaque</h2>
+            <p class="texto-mudo">
+              Espaço para contar o contexto do case: quem foi atendido, qual era o desafio e o que o cuidado da
+              nossa equipe mudou. No portal final, cada case é uma linha da planilha.
+            </p>
+          </article>
+          <article class="cartao bento__item--3 prot-bloco prot-bloco--vazio">
+            <span class="selo selo--neutro">Em breve</span>
+            <h2 class="titulo-3">Próximo case</h2>
+            <p class="texto-mudo texto-pequeno">Novos vídeos entram aqui assim que forem publicados pela equipe.</p>
+          </article>
+          <article class="cartao bento__item--3 prot-bloco prot-bloco--vazio">
+            <span class="selo selo--neutro">Em breve</span>
+            <h2 class="titulo-3">Depoimentos de profissionais</h2>
+            <p class="texto-mudo texto-pequeno">Profissionais parceiros contando como é atender pela MediQuo.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══ Aniversários e tempo de casa ═══ -->
+      <section class="prot-pagina" data-pagina="celebracoes" aria-labelledby="tCelebracoes" hidden>
+        <header class="prot-cabecalho">
+          <h1 id="tCelebracoes" class="titulo-1 texto-gradiente" tabindex="-1">Aniversários e tempo de casa</h1>
+          <p class="texto-lead">Quem faz aniversário e quem completa mais um ano com a gente, por mês e por área.</p>
+        </header>
+
+        <div class="prot-filtros">
+          <div class="prot-segmentado" role="tablist" aria-label="Tipo de celebração">
+            <button type="button" role="tab" class="prot-segmentado__opcao" data-modo="aniversarios" aria-selected="true">Aniversários</button>
+            <button type="button" role="tab" class="prot-segmentado__opcao" data-modo="entradas" aria-selected="false">Entradas na empresa</button>
+          </div>
+          <div id="celebracoesAreas" class="prot-chips" role="group" aria-label="Filtrar por área"></div>
+        </div>
+
+        <div class="prot-calendario-layout">
+          <article class="cartao prot-calendario-cartao">
+            <div id="celebracoesCalendario"></div>
+          </article>
+          <article class="cartao prot-painel">
+            <div class="prot-painel__topo">
+              <h2 id="celebracoesTitulo" class="prot-painel__titulo">Setembro</h2>
+              <button id="celebracoesLimpar" class="botao botao--fantasma botao--sm" type="button" hidden>Ver o mês todo</button>
+            </div>
+            <div id="celebracoesLista" class="prot-grupos-area"></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══ Artes de celebração ═══ -->
+      <section class="prot-pagina" data-pagina="artes" aria-labelledby="tArtes" hidden>
+        <header class="prot-cabecalho">
+          <h1 id="tArtes" class="titulo-1 texto-gradiente" tabindex="-1">Artes de celebração</h1>
+          <p class="texto-lead">A arte é gerada automaticamente e enviada por e-mail na data. Aqui você pode ver e baixar cada modelo.</p>
+        </header>
+
+        <div id="arteModelos" class="prot-modelos" role="radiogroup" aria-label="Modelo da arte"></div>
+
+        <div class="prot-arte-layout">
+          <form id="arteFormulario" class="cartao prot-arte-form" novalidate>
+            <div class="campo-grupo">
+              <label class="campo-rotulo" for="artePessoa">Profissional</label>
+              <select id="artePessoa" class="campo"></select>
+            </div>
+            <div class="campo-grupo">
+              <label class="campo-rotulo" for="arteMensagem">Mensagem</label>
+              <textarea id="arteMensagem" class="campo" maxlength="110" rows="3"></textarea>
+              <p class="campo-ajuda">Até 110 caracteres.</p>
+            </div>
+            <button id="arteBaixar" class="botao botao--primario" type="submit">
+              <span data-icone="download"></span><span class="botao__rotulo">Baixar arte em PNG</span>
+            </button>
+          </form>
+          <div class="prot-arte-previa">
+            <canvas id="arteCanvas" class="prot-arte-previa__canvas" width="1080" height="1350" role="img" aria-label="Pré-visualização da arte"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ Protocolos ═══ -->
+      <section class="prot-pagina" data-pagina="protocolos" aria-labelledby="tProtocolos" hidden>
+        <header class="prot-cabecalho">
+          <h1 id="tProtocolos" class="titulo-1 texto-gradiente" tabindex="-1">Protocolos de atendimento</h1>
+          <p class="texto-lead">A versão vigente de cada protocolo, sempre atualizada pela coordenação da área.</p>
+        </header>
+        <div id="listaProtocolos" class="prot-grade-3"></div>
+      </section>
+
+      <!-- ═══ Boas práticas ═══ -->
+      <section class="prot-pagina" data-pagina="boas-praticas" aria-labelledby="tPraticas" hidden>
+        <header class="prot-cabecalho">
+          <h1 id="tPraticas" class="titulo-1 texto-gradiente" tabindex="-1">Boas práticas em telessaúde</h1>
+          <p class="texto-lead">O padrão de atendimento que o paciente reconhece como MediQuo, em qualquer área.</p>
+        </header>
+
+        <h2 class="titulo-3">Para todas as áreas</h2>
+        <div class="prot-grade-3">
+          <article class="cartao prot-pratica">
+            <span class="icone-caixa" data-icone="camera"></span>
+            <h3 class="prot-pratica__titulo">Ambiente</h3>
+            <ul class="prot-checklist">
+              <li>Atenda com fundo neutro, liso e organizado.</li>
+              <li>Prefira luz de frente para o rosto, nunca atrás de você.</li>
+              <li>Escolha um local silencioso e reservado, sem outras pessoas por perto.</li>
+            </ul>
+          </article>
+          <article class="cartao prot-pratica">
+            <span class="icone-caixa" data-icone="pessoas"></span>
+            <h3 class="prot-pratica__titulo">Acolhimento</h3>
+            <ul class="prot-checklist">
+              <li>Pergunte como o paciente prefere ser chamado e use esse nome.</li>
+              <li>Apresente-se com nome, área e registro profissional.</li>
+              <li>Mantenha o olhar na câmera quando estiver falando.</li>
+            </ul>
+          </article>
+          <article class="cartao prot-pratica">
+            <span class="icone-caixa" data-icone="usuario"></span>
+            <h3 class="prot-pratica__titulo">Apresentação pessoal</h3>
+            <ul class="prot-checklist">
+              <li>Use roupa profissional compatível com a sua área.</li>
+              <li>Deixe o crachá ou a identificação visível quando aplicável.</li>
+              <li>Evite acessórios e fundos que tirem a atenção do paciente.</li>
+            </ul>
+          </article>
+          <article class="cartao prot-pratica">
+            <span class="icone-caixa" data-icone="wifi"></span>
+            <h3 class="prot-pratica__titulo">Tecnologia</h3>
+            <ul class="prot-checklist">
+              <li>Teste câmera, áudio e conexão antes do primeiro atendimento do dia.</li>
+              <li>Use fone de ouvido para garantir privacidade e boa escuta.</li>
+              <li>Posicione a câmera na altura dos olhos.</li>
+            </ul>
+          </article>
+          <article class="cartao prot-pratica">
+            <span class="icone-caixa" data-icone="cadeado"></span>
+            <h3 class="prot-pratica__titulo">Sigilo e LGPD</h3>
+            <ul class="prot-checklist">
+              <li>Nunca atenda em locais públicos ou em redes abertas.</li>
+              <li>Não grave o atendimento sem consentimento registrado.</li>
+              <li>Feche outras abas e notificações durante a consulta.</li>
+            </ul>
+          </article>
+          <article class="cartao prot-pratica">
+            <span class="icone-caixa" data-icone="sucesso"></span>
+            <h3 class="prot-pratica__titulo">Encerramento</h3>
+            <ul class="prot-checklist">
+              <li>Resuma as orientações e confirme se o paciente entendeu.</li>
+              <li>Explique os próximos passos e como voltar a falar com a equipe.</li>
+              <li>Registre o atendimento em prontuário logo após encerrar.</li>
+            </ul>
+          </article>
+        </div>
+
+        <h2 class="titulo-3">Por área</h2>
+        <div class="prot-acordeao">
+          <details class="cartao prot-acordeao__item" open>
+            <summary>Medicina</summary>
+            <ul class="prot-checklist">
+              <li>Atenda sempre de jaleco.</li>
+              <li>Confirme alergias e medicamentos em uso antes de qualquer prescrição.</li>
+              <li>Informe quando o caso exigir avaliação presencial e oriente o encaminhamento.</li>
+            </ul>
+          </details>
+          <details class="cartao prot-acordeao__item">
+            <summary>Psicologia</summary>
+            <ul class="prot-checklist">
+              <li>Combine no início o tempo da sessão e o que fazer se a conexão cair.</li>
+              <li>Confirme que o paciente está em um local reservado para falar.</li>
+              <li>Tenha o fluxo de acolhimento de crise sempre à mão.</li>
+            </ul>
+          </details>
+          <details class="cartao prot-acordeao__item">
+            <summary>Nutrição</summary>
+            <ul class="prot-checklist">
+              <li>Peça com antecedência exames recentes e o registro alimentar.</li>
+              <li>Envie o plano alimentar por escrito ao final do atendimento.</li>
+            </ul>
+          </details>
+          <details class="cartao prot-acordeao__item">
+            <summary>Educação física</summary>
+            <ul class="prot-checklist">
+              <li>Peça que o paciente posicione a câmera mostrando o corpo inteiro.</li>
+              <li>Demonstre cada exercício antes de pedir a execução.</li>
+              <li>Confirme que o espaço está livre de obstáculos.</li>
+            </ul>
+          </details>
+          <details class="cartao prot-acordeao__item">
+            <summary>Medicina veterinária</summary>
+            <ul class="prot-checklist">
+              <li>Oriente o tutor a posicionar o animal em local bem iluminado.</li>
+              <li>Pergunte o nome do animal e use-o durante o atendimento.</li>
+            </ul>
+          </details>
+          <details class="cartao prot-acordeao__item">
+            <summary>Dermatologia</summary>
+            <ul class="prot-checklist">
+              <li>Prefira luz natural para avaliar lesões.</li>
+              <li>Peça fotos nítidas e com referência de tamanho antes da consulta.</li>
+            </ul>
+          </details>
+        </div>
+      </section>
+
+      <!-- ═══ Reuniões individuais ═══ -->
+      <section class="prot-pagina" data-pagina="reunioes" aria-labelledby="tReunioes" hidden>
+        <header class="prot-cabecalho">
+          <h1 id="tReunioes" class="titulo-1 texto-gradiente" tabindex="-1">Reuniões individuais</h1>
+          <p class="texto-lead">Um encontro individual com a gestão de saúde para falar da sua rotina, dos seus desafios e do seu desenvolvimento.</p>
+        </header>
+
+        <ol class="prot-etapas" aria-label="Como funciona">
+          <li><strong>Agende</strong><span>Escolha dia, horário e pauta.</span></li>
+          <li><strong>Pauta validada</strong><span>A gestão confirma os temas.</span></li>
+          <li><strong>Confirme presença</strong><span>Um clique na véspera.</span></li>
+          <li><strong>Reunião</strong><span>Por vídeo, 30 minutos.</span></li>
+          <li><strong>Resumo por e-mail</strong><span>O que foi combinado.</span></li>
+          <li><strong>Você valida</strong><span>Confirma que a reunião ocorreu.</span></li>
+        </ol>
+
+        <div class="prot-reunioes-layout">
+          <form id="reuniaoFormulario" class="cartao prot-reuniao-form" novalidate>
+            <h2 class="prot-painel__titulo">Agendar reunião</h2>
+            <div id="reuniaoCalendario"></div>
+            <fieldset class="prot-fieldset">
+              <legend class="campo-rotulo">Horários disponíveis</legend>
+              <div id="reuniaoHorarios" class="prot-horarios"></div>
+            </fieldset>
+            <fieldset class="prot-fieldset">
+              <legend class="campo-rotulo">Pauta</legend>
+              <div id="reuniaoPautas" class="prot-chips"></div>
+            </fieldset>
+            <div class="campo-grupo">
+              <label class="campo-rotulo" for="reuniaoDetalhe">Conte um pouco mais <span class="texto-mudo">(opcional)</span></label>
+              <textarea id="reuniaoDetalhe" class="campo" maxlength="500" rows="3" placeholder="O que você gostaria de conversar?"></textarea>
+            </div>
+            <p id="reuniaoErro" class="campo-erro" role="alert"></p>
+            <button class="botao botao--primario" type="submit">Solicitar reunião</button>
+          </form>
+
+          <article class="cartao prot-painel">
+            <h2 class="prot-painel__titulo">Minhas reuniões</h2>
+            <ul id="reuniaoLista" class="prot-reunioes"></ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══ Enquete: conheça os sócios ═══ -->
+      <section class="prot-pagina" data-pagina="enquete" aria-labelledby="tEnquete" hidden>
+        <header class="prot-cabecalho">
+          <h1 id="tEnquete" class="titulo-1 texto-gradiente" tabindex="-1">Conheça o CEO e o COO</h1>
+          <p class="texto-lead">
+            Um encontro online de 45 minutos com Vitor e Adalberto para conhecer a história da MediQuo e tirar
+            dúvidas diretamente com os sócios.
+          </p>
+        </header>
+
+        <form id="enqueteFormulario" class="cartao prot-enquete" novalidate>
+          <div class="prot-painel__topo">
+            <h2 class="prot-painel__titulo">Quais horários funcionam para você?</h2>
+            <span id="enqueteEncerra" class="selo selo--neutro"></span>
+          </div>
+          <p class="texto-mudo texto-pequeno">Marque todos os horários em que você consegue participar. O mais votado vira o convite.</p>
+          <fieldset class="prot-fieldset">
+            <legend class="sr-only">Horários</legend>
+            <div id="enqueteOpcoes" class="prot-opcoes"></div>
+          </fieldset>
+          <p id="enqueteErro" class="campo-erro" role="alert"></p>
+          <div class="prot-enquete__rodape">
+            <span id="enqueteTotal" class="texto-mudo texto-pequeno"></span>
+            <button id="enqueteEnviar" class="botao botao--primario" type="submit">Enviar disponibilidade</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ═══ Pesquisa de satisfação ═══ -->
+      <section class="prot-pagina" data-pagina="satisfacao" aria-labelledby="tSatisfacao" hidden>
+        <header class="prot-cabecalho">
+          <h1 id="tSatisfacao" class="titulo-1 texto-gradiente" tabindex="-1">Pesquisa de satisfação</h1>
+          <p class="texto-lead">Sua resposta é anônima e ajuda a decidir o que melhorar primeiro.</p>
+        </header>
+
+        <form id="csatFormulario" class="cartao prot-csat" novalidate>
+          <div class="prot-painel__topo">
+            <span id="csatCiclo" class="selo"></span>
+            <span class="selo selo--sucesso">Anônima</span>
+          </div>
+          <div id="csatPerguntas" class="prot-csat__perguntas"></div>
+          <div class="campo-grupo">
+            <label class="campo-rotulo" for="csatSugestao">O que podemos melhorar?</label>
+            <textarea id="csatSugestao" class="campo" maxlength="1000" rows="4" placeholder="Conte o que faria diferença no seu dia a dia com a MediQuo."></textarea>
+          </div>
+          <p id="csatErro" class="campo-erro" role="alert"></p>
+          <button class="botao botao--primario" type="submit">Enviar respostas</button>
+        </form>
+
+        <article id="csatObrigado" class="cartao cartao--gradiente prot-obrigado" hidden>
+          <span class="icone-caixa" data-icone="sucesso"></span>
+          <h2 class="titulo-3">Respostas enviadas. Obrigado!</h2>
+          <p class="texto-mudo">A gestão recebe apenas o consolidado do ciclo, sem identificar quem respondeu.</p>
+          <button id="csatNovamente" class="botao botao--secundario" type="button">Responder novamente (demonstração)</button>
+        </article>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="rodape">
+    <div class="prot-largura">© <span data-ano></span> MediQuo. Protótipo com dados fictícios, para apresentação.</div>
+  </footer>
+
+  <!-- Resumo da reunião (simula o e-mail enviado após a 1:1) -->
+  <dialog id="dialogoResumo" class="modal prot-modal-email" aria-labelledby="resumoTitulo">
+    <div class="cartao modal__cartao">
+      <div class="modal__cabecalho">
+        <h2 id="resumoTitulo" class="modal__titulo">Resumo da reunião</h2>
+        <button class="botao botao--fantasma botao--icone botao--sm" type="button" data-fechar-dialogo aria-label="Fechar">
+          <span data-icone="fechar"></span>
+        </button>
+      </div>
+      <div id="resumoCorpo" class="prot-email"></div>
+      <div class="modal__acoes">
+        <button id="resumoContestar" class="botao botao--secundario" type="button">Pedir correção</button>
+        <button id="resumoConfirmar" class="botao botao--primario" type="button">Confirmo que a reunião ocorreu</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div id="regiaoToast" class="regiao-toast"></div>
+</body>
+</html>
