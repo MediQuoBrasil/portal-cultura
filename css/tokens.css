@@ -1,0 +1,218 @@
+/* ═══════════════════════════════════════════════════════════
+   Portal de Cultura — Tokens do design system
+   Fonte de verdade: frontend.md (Linear / Modern).
+   Tema escuro é o padrão; o claro é derivado dos mesmos princípios
+   (frontend.md não define tema claro — ver notas abaixo).
+   Trocar o acento = alterar --acento-rgb e os três hex do acento.
+   ═══════════════════════════════════════════════════════════ */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Fundos (nunca #000) */
+  --fundo-profundo: #020203;
+  --fundo-base: #050506;
+  --fundo-elevado: #0a0a0c;
+
+  /* Superfícies translúcidas */
+  --superficie: rgba(255, 255, 255, 0.05);
+  --superficie-hover: rgba(255, 255, 255, 0.08);
+  --fundo-cartao: linear-gradient(to bottom, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  --fundo-vidro: rgba(5, 5, 6, 0.72);
+  --fundo-painel-movel: rgba(5, 5, 6, 0.98);
+
+  /* Texto (nunca #fff puro) */
+  --texto: #ededef;
+  --texto-mudo: #8a8f98;
+  --texto-sutil: rgba(255, 255, 255, 0.6);
+  --titulo-de: #ffffff;
+  --titulo-meio: rgba(255, 255, 255, 0.95);
+  --titulo-ate: rgba(255, 255, 255, 0.7);
+
+  /* Acento */
+  --acento-rgb: 94, 106, 210;
+  --acento: #5e6ad2;
+  --acento-claro: #6872d9;
+  --acento-texto: #8b93e6; /* 7.2:1 sobre o fundo — #5e6ad2 como texto daria 4.3:1 */
+  --acento-brilho: rgba(var(--acento-rgb), 0.3);
+  --acento-reflexo: #a5b4fc; /* ponto claro do brilho animado do texto */
+  --sobre-acento: #ffffff;
+
+  /* Bordas (quase invisíveis) */
+  --borda: rgba(255, 255, 255, 0.06);
+  --borda-hover: rgba(255, 255, 255, 0.1);
+  --borda-acento: rgba(var(--acento-rgb), 0.3);
+
+  /* Campos */
+  --campo-fundo: #0f0f12;
+  --campo-borda: rgba(255, 255, 255, 0.1);
+  --campo-placeholder: #6b7280;
+
+  /* Estados (derivados: frontend.md não define) */
+  --perigo: #eb5757;
+  --perigo-suave: rgba(235, 87, 87, 0.12);
+  --sucesso: #4cb782;
+  --sucesso-suave: rgba(76, 183, 130, 0.12);
+  --alerta: #f2c94c;
+  --alerta-suave: rgba(242, 201, 76, 0.12);
+
+  /* Sombras multicamada */
+  --sombra-cartao:
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 2px 20px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(0, 0, 0, 0.2);
+  --sombra-cartao-hover:
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 8px 40px rgba(0, 0, 0, 0.5),
+    0 0 80px rgba(var(--acento-rgb), 0.1);
+  --sombra-cta:
+    0 0 0 1px rgba(var(--acento-rgb), 0.5),
+    0 4px 12px rgba(var(--acento-rgb), 0.3),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+  --sombra-cta-hover:
+    0 0 0 1px rgba(var(--acento-rgb), 0.6),
+    0 6px 20px rgba(var(--acento-rgb), 0.45),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
+  --sombra-cta-ativo:
+    0 0 0 1px rgba(var(--acento-rgb), 0.5),
+    0 2px 6px rgba(var(--acento-rgb), 0.25),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+  --realce-interno: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  --sombra-flutuante:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 16px 48px rgba(0, 0, 0, 0.6),
+    0 0 80px rgba(0, 0, 0, 0.3);
+  --linha-topo: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.14), transparent);
+  --divisor: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+
+  /* Luz ambiente */
+  --ambiente-base: radial-gradient(ellipse at top, #0a0a0f 0%, #050506 50%, #020203 100%);
+  --blob-primario: rgba(var(--acento-rgb), 0.25);
+  --blob-secundario: rgba(168, 85, 247, 0.15);
+  --blob-terciario: rgba(59, 130, 246, 0.12);
+  --blob-inferior: rgba(var(--acento-rgb), 0.1);
+  --ruido-opacidade: 0.015;
+  --grade-cor: rgba(255, 255, 255, 1);
+  --grade-opacidade: 0.02;
+  --spotlight: rgba(var(--acento-rgb), 0.15);
+
+  /* Foco */
+  --anel-foco: rgba(var(--acento-rgb), 0.5);
+}
+
+/* Tema claro — derivado: mesmos papéis de token, luz invertida.
+   Texto quase-preto (nunca #000), acento idêntico nos botões, acento-texto mais
+   escuro para manter ≥ 4.5:1 em links. Glows mais tênues: luz sobre papel. */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --fundo-profundo: #eeeef1;
+  --fundo-base: #f7f7f8;
+  --fundo-elevado: #ffffff;
+
+  --superficie: rgba(15, 15, 20, 0.03);
+  --superficie-hover: rgba(15, 15, 20, 0.06);
+  --fundo-cartao: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
+  --fundo-vidro: rgba(247, 247, 248, 0.75);
+  --fundo-painel-movel: rgba(247, 247, 248, 0.98);
+
+  --texto: #0e0e12;
+  --texto-mudo: #5d616b;
+  --texto-sutil: rgba(14, 14, 18, 0.6);
+  --titulo-de: #0e0e12;
+  --titulo-meio: rgba(14, 14, 18, 0.92);
+  --titulo-ate: rgba(14, 14, 18, 0.68);
+
+  --acento-texto: #4b55c4; /* 5.8:1 sobre #f7f7f8 */
+  --acento-reflexo: #3d47b3; /* no claro o reflexo escurece: texto pálido some no papel */
+
+  --borda: rgba(15, 15, 20, 0.07);
+  --borda-hover: rgba(15, 15, 20, 0.12);
+  --borda-acento: rgba(var(--acento-rgb), 0.35);
+
+  --campo-fundo: #ffffff;
+  --campo-borda: rgba(15, 15, 20, 0.12);
+  --campo-placeholder: #8a8f98;
+
+  --perigo: #c93a3a;
+  --perigo-suave: rgba(201, 58, 58, 0.08);
+  --sucesso: #17784e;
+  --sucesso-suave: rgba(23, 120, 78, 0.08);
+  --alerta: #8a5f00;
+  --alerta-suave: rgba(242, 201, 76, 0.18);
+
+  --sombra-cartao:
+    0 0 0 1px rgba(15, 15, 20, 0.06),
+    0 2px 20px rgba(15, 15, 20, 0.05),
+    0 0 40px rgba(15, 15, 20, 0.03);
+  --sombra-cartao-hover:
+    0 0 0 1px rgba(15, 15, 20, 0.1),
+    0 8px 40px rgba(15, 15, 20, 0.08),
+    0 0 80px rgba(var(--acento-rgb), 0.08);
+  --sombra-cta:
+    0 0 0 1px rgba(var(--acento-rgb), 0.6),
+    0 4px 12px rgba(var(--acento-rgb), 0.25),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
+  --realce-interno: inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+  --sombra-flutuante:
+    0 0 0 1px rgba(15, 15, 20, 0.08),
+    0 16px 48px rgba(15, 15, 20, 0.12),
+    0 0 80px rgba(15, 15, 20, 0.05);
+  --linha-topo: linear-gradient(to right, transparent, rgba(255, 255, 255, 1), transparent);
+  --divisor: linear-gradient(to right, transparent, rgba(15, 15, 20, 0.1), transparent);
+
+  --ambiente-base: radial-gradient(ellipse at top, #ffffff 0%, #f7f7f8 50%, #eeeef1 100%);
+  --blob-primario: rgba(var(--acento-rgb), 0.14);
+  --blob-secundario: rgba(168, 85, 247, 0.08);
+  --blob-terciario: rgba(59, 130, 246, 0.07);
+  --blob-inferior: rgba(var(--acento-rgb), 0.06);
+  --ruido-opacidade: 0.02;
+  --grade-cor: rgba(15, 15, 20, 1);
+  --grade-opacidade: 0.035;
+  --spotlight: rgba(var(--acento-rgb), 0.1);
+}
+
+/* Tokens independentes de tema */
+:root {
+  --fonte: "Inter", "Geist Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fonte-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --raio-sm: 8px;   /* botões, campos */
+  --raio-md: 12px;  /* contêiner de ícone */
+  --raio-lg: 16px;  /* cartões, contêineres grandes */
+  --raio-total: 999px;
+
+  --curva-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-rapido: 200ms;
+  --t-padrao: 300ms;
+  --t-entrada: 600ms;
+
+  /* Escala 4px */
+  --e-1: 0.25rem;
+  --e-2: 0.5rem;
+  --e-3: 0.75rem;
+  --e-4: 1rem;
+  --e-5: 1.25rem;
+  --e-6: 1.5rem;
+  --e-8: 2rem;
+  --e-10: 2.5rem;
+  --e-12: 3rem;
+  --e-16: 4rem;
+  --e-24: 6rem;
+  --e-32: 8rem;
+
+  --largura-container: 72rem;
+  --largura-texto: 42rem;
+  --altura-topo: 4rem;
+
+  /* Tipografia responsiva (mobile → tablet → desktop) */
+  --fs-display: clamp(2.25rem, 1.1rem + 4.6vw, 4.5rem);
+  --fs-h1: clamp(2rem, 1.3rem + 2.8vw, 3.75rem);
+  --fs-h2: clamp(1.625rem, 1.2rem + 1.6vw, 2.25rem);
+  --fs-h3: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  --fs-lead: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+  --fs-corpo: 0.9375rem;
+  --fs-pequeno: 0.875rem;
+  --fs-rotulo: 0.75rem;
+}
