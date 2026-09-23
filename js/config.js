@@ -35,8 +35,8 @@
 
 /** @type {Readonly<ConfigPortal>} */
 export const CONFIG = Object.freeze({
-  API_URL: 'https://script.google.com/macros/s/SUBSTITUIR_ID_DA_IMPLANTACAO/exec',
-  GIS_CLIENT_ID: 'SUBSTITUIR.apps.googleusercontent.com',
+  API_URL: 'https://script.google.com/macros/s/AKfycbwiwVzwtQrBuo7vLIgnoRTwNPaWgovuasqjBO7IsxipiMfIwTU1S0Cz0H0Q7UCpFIT3/exec',
+  GIS_CLIENT_ID: '324245503326-dpujnejhmdq7rl9bsf0mvd88389p75e7.apps.googleusercontent.com',
   DEBUG: ['localhost', '127.0.0.1'].includes(globalThis.location?.hostname ?? ''),
   VERSAO_CACHE: 1,
   TIMEOUT_LOGIN_MS: 30000,
