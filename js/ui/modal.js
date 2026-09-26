@@ -23,6 +23,7 @@ import { criarIcone } from './icones.js';
  * @property {Node} [corpo] Conteúdo adicional (já construído com DOM seguro).
  * @property {Array<AcaoModal>} [acoes] Botões do rodapé.
  * @property {boolean} [fecharAoClicarFora=true]
+ * @property {'padrao'|'largo'} [tamanho='padrao'] `largo` para vídeo, documento e perfil.
  */
 
 let contador = 0;
@@ -33,7 +34,7 @@ let contador = 0;
  * @returns {Promise<*>} Valor escolhido ou null.
  */
 export const abrirModal = ({
-  titulo, descricao, corpo, acoes = [], fecharAoClicarFora = true,
+  titulo, descricao, corpo, acoes = [], fecharAoClicarFora = true, tamanho = 'padrao',
 }) => new Promise((resolve) => {
   contador += 1;
   const idTitulo = `modalTitulo${contador}`;
@@ -41,7 +42,7 @@ export const abrirModal = ({
   let escolhido = null;
 
   const dialogo = criarElemento('dialog', {
-    classe: 'modal',
+    classe: tamanho === 'largo' ? 'modal modal--largo' : 'modal',
     atributos: { 'aria-labelledby': idTitulo, 'aria-describedby': idDescricao },
   });
 
