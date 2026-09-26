@@ -22,6 +22,7 @@ import { definirTodosFrescos, limparCache } from './cache.js';
 import { configuracaoValida } from './config.js';
 import { ouvir } from './eventos.js';
 import { logErro, logInfo } from './log.js';
+import { iniciarPaginas, limparPortal, renderizarPortal } from './paginas.js';
 import {
   criarSessao, lerSessao, limparSessao, salvarSessao, tokenUtilizavel,
 } from './sessao.js';
@@ -70,6 +71,7 @@ const mensagemDeErroLogin = (erro) => {
 const abrirApp = (snapshot) => {
   estado.snapshot = snapshot;
   renderizarApp(snapshot);
+  renderizarPortal(snapshot);
   iniciarVigia();
   if (snapshot.falhas.length > 0) {
     mostrarToast('Algumas seções não carregaram agora. Elas voltam na próxima atualização.', { tipo: 'alerta' });
@@ -176,6 +178,7 @@ const sair = async (mensagem = '') => {
   pararVigia();
   limparSessao();
   estado.snapshot = null;
+  limparPortal();
   encerrarGoogle();
   await limparCache();
   logInfo('sessao_encerrada');
@@ -194,6 +197,7 @@ const ouvirEventosDeSessao = () => {
   ouvir('dados:atualizados', (snapshot) => {
     estado.snapshot = snapshot;
     renderizarUsuario(snapshot.me);
+    renderizarPortal(snapshot);
   });
 };
 
@@ -205,6 +209,7 @@ const iniciar = async () => {
   iniciarShell({ aoSair: () => sair() });
   iniciarTema({ aoMudar: () => { prepararBotaoGoogle(); } });
   iniciarEfeitos();
+  iniciarPaginas();
   ouvirEventosDeSessao();
 
   if (!configuracaoValida()) {

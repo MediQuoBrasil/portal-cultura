@@ -1,7 +1,7 @@
 /**
  * @file shell.js
  * Casca da interface: troca de telas (inicial/login/app), estados do login, topo com usuário,
- * menu móvel e hero de boas-vindas. Navegação e páginas entram na Fase 11 (`#navPrincipal`,
+ * menu móvel e hero de boas-vindas. Navegação e páginas vivem em paginas.js (`#navPrincipal`,
  * `#areaPagina`).
  */
 
@@ -40,6 +40,7 @@ const elementos = () => ({
   avatar: exigirElemento('usuarioAvatar'),
   nome: exigirElemento('usuarioNome'),
   papel: exigirElemento('usuarioPapel'),
+  hero: exigirElemento('heroTitulo').closest('.hero'),
   heroTitulo: exigirElemento('heroTitulo'),
   heroTexto: exigirElemento('heroTexto'),
 });
@@ -125,6 +126,15 @@ export const definirValidandoLogin = (ativo) => {
 
 /** @returns {HTMLElement} Contêiner do botão oficial do Google. */
 export const contenedorBotaoGoogle = () => elementos().botaoGoogle;
+
+/**
+ * O hero de boas-vindas aparece só no início; nas páginas, o título da página assume.
+ * @param {boolean} visivel Estado desejado.
+ * @returns {void}
+ */
+export const definirHeroVisivel = (visivel) => {
+  elementos().hero.toggleAttribute('hidden', !visivel);
+};
 
 /**
  * Preenche topo e hero com o perfil (texto sempre via textContent).

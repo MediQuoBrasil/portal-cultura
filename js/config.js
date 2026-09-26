@@ -109,6 +109,14 @@ export const MAPA_INVALIDACAO = Object.freeze({
 });
 
 /**
+ * Hosts de onde o navegador pode carregar imagens de blocos. Espelha `img-src` da CSP
+ * (vercel.json) e o `midia_hosts_permitidos` da aba `config`: o servidor já filtra, esta é a
+ * segunda barreira. Host novo = acrescentar nos três lugares.
+ * @type {ReadonlyArray<string>}
+ */
+export const HOSTS_IMAGEM = Object.freeze(['drive.google.com', 'lh3.googleusercontent.com', 'i.ytimg.com']);
+
+/**
  * Rótulos exibidos para cada papel (vindos do servidor; o front só apresenta).
  * @type {Readonly<Object<string, string>>}
  */
