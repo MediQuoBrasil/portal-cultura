@@ -4,7 +4,7 @@
  * entregues no bootstrap e já filtrados por papel/especialidade no servidor):
  *
  *   #/          → hero + grade bento com as seções do portal
- *   #/<slug>    → página `conteudo` (blocos) ou `modulo` (feedback, enquetes… — Fase 12)
+ *   #/<slug>    → página `conteudo` (blocos) ou `modulo` (feedback, enquetes…; ver modulos/)
  *   #/editar…   → editor do portal (só admin; ver editor/editor.js)
  *   outro slug  → "página não encontrada" (inclui página sem permissão: o servidor nem a envia)
  *
@@ -16,6 +16,7 @@ import { marcarPaginaAtual, renderizarNavegacao } from './navegacao.js';
 import { renderizarBlocos } from './blocos/renderizador.js';
 import { abrirEditor, editorAtivo, fecharEditor } from './editor/editor.js';
 import { logErro } from './log.js';
+import { limparModulos, moduloDisponivel, montarModulo } from './modulos/modulos.js';
 import { hashDaRota, ouvirRotas, rotaAtual } from './rotas.js';
 import { definirHeroVisivel, fecharMenu } from './shell.js';
 import { criarElemento, exigirElemento } from './ui/dom.js';
@@ -203,7 +204,7 @@ const criarCabecalho = (titulo, acao = null) => criarElemento('header', {
 });
 
 /**
- * Página de módulo: o conteúdo interativo entra na Fase 12.
+ * Página de módulo que ainda não tem tela (ver modulos/modulos.js).
  * @param {PaginaPublica} pagina Página.
  * @param {Snapshot} snapshot Snapshot.
  * @returns {HTMLElement} Estado "em preparação".
@@ -296,6 +297,11 @@ const pintarRota = async (rota, { focar }) => {
         titulo: 'Este endereço não corresponde a nenhuma seção disponível para você.',
         texto: 'Use o menu para escolher uma seção ou volte ao início.',
       }));
+    } else if (pagina.tipo === 'modulo' && moduloDisponivel(pagina.modulo)) {
+      const corpo = criarElemento('div', { classe: 'modulo', atributos: { 'data-modulo': pagina.modulo } });
+      area.replaceChildren(criarCabecalho(pagina.titulo), corpo);
+      await montarModulo(pagina.modulo, corpo, { snapshot, vigente: () => geracao === estado.geracao });
+      if (geracao !== estado.geracao) return;
     } else if (pagina.tipo === 'modulo') {
       area.replaceChildren(criarCabecalho(pagina.titulo), criarModulo(pagina, snapshot));
     } else {
@@ -363,6 +369,7 @@ export const renderizarPortal = async (snapshot) => {
  */
 export const limparPortal = () => {
   fecharEditor();
+  limparModulos();
   estado.snapshot = null;
   estado.assinatura = '';
   estado.geracao += 1;

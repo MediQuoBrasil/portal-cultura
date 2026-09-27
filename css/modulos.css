@@ -1,0 +1,436 @@
+/* ═══════════════════════════════════════════════════════════
+   Módulos funcionais (feedback, enquetes, marcos…)
+   Só tokens de tokens.css: tema claro/escuro e troca de acento
+   continuam valendo sem tocar aqui. Controles de escolha
+   (.escolha) e erro de formulário (.painel__erro) vêm de editor.css.
+   ═══════════════════════════════════════════════════════════ */
+
+.modulo {
+  display: grid;
+  gap: var(--e-8);
+  padding-bottom: var(--e-16);
+}
+
+@media (min-width: 768px) {
+  .modulo { padding-bottom: var(--e-24); }
+}
+
+/* ─── Abas ───────────────────────────────────────────────── */
+
+.abas {
+  display: grid;
+  gap: var(--e-8);
+}
+
+.abas__lista {
+  display: flex;
+  gap: var(--e-1);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--borda);
+  scrollbar-width: none;
+}
+
+.abas__lista::-webkit-scrollbar {
+  display: none;
+}
+
+.abas__aba {
+  position: relative;
+  flex-shrink: 0;
+  min-height: 2.75rem;
+  padding: 0 var(--e-4);
+  font-size: var(--fs-pequeno);
+  font-weight: 500;
+  color: var(--texto-mudo);
+  background: transparent;
+  border: 0;
+  border-radius: var(--raio-sm) var(--raio-sm) 0 0;
+  cursor: pointer;
+  transition: color var(--t-rapido) ease-out;
+}
+
+.abas__aba:hover {
+  color: var(--texto);
+}
+
+.abas__aba[aria-selected="true"] {
+  color: var(--texto);
+}
+
+.abas__aba[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  left: var(--e-3);
+  right: var(--e-3);
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--acento);
+}
+
+.abas__aba:focus-visible {
+  outline: 2px solid var(--anel-foco);
+  outline-offset: -2px;
+}
+
+.abas__painel:focus-visible {
+  outline: 2px solid var(--anel-foco);
+  outline-offset: 4px;
+  border-radius: var(--raio-sm);
+}
+
+/* ─── Feedback: formulário ───────────────────────────────── */
+
+.feedback-formulario {
+  display: grid;
+  gap: var(--e-5);
+  max-width: var(--largura-texto);
+}
+
+.feedback-formulario__cabecalho {
+  display: grid;
+  gap: var(--e-2);
+}
+
+.feedback-formulario__acoes {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 639px) {
+  .feedback-formulario__acoes .botao { flex: 1 1 100%; }
+}
+
+.feedback-aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--e-4);
+  padding: var(--e-5);
+}
+
+@media (min-width: 768px) {
+  .feedback-aviso { padding: var(--e-5) var(--e-6); }
+}
+
+.feedback-aviso .icone-caixa {
+  flex-shrink: 0;
+}
+
+.feedback-aviso__textos {
+  display: grid;
+  gap: var(--e-1);
+}
+
+.feedback-aviso__titulo {
+  font-weight: 600;
+  color: var(--titulo-de);
+}
+
+.feedback-pergunta {
+  display: grid;
+  gap: var(--e-4);
+  min-width: 0;
+  margin: 0;
+  border: 0;
+}
+
+.feedback-pergunta--erro {
+  box-shadow: var(--sombra-cartao), 0 0 0 1px var(--perigo);
+}
+
+.feedback-pergunta__legenda {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--e-2);
+  float: left; /* legend fora do fluxo de borda do fieldset: alinha como texto comum */
+  width: 100%;
+  padding: 0;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--titulo-de);
+}
+
+.feedback-pergunta__legenda + * {
+  clear: both;
+}
+
+.feedback-pergunta__numero {
+  font-family: var(--fonte-mono);
+  font-size: var(--fs-rotulo);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--texto-mudo);
+}
+
+.feedback-pergunta__marca {
+  font-size: var(--fs-pequeno);
+  font-weight: 400;
+  color: var(--texto-mudo);
+}
+
+.feedback-pergunta .campo-erro:empty {
+  display: none;
+}
+
+.feedback-contador {
+  text-align: right;
+}
+
+.feedback-texto {
+  display: grid;
+  gap: var(--e-2);
+}
+
+/* Escala numérica: botões de rádio em faixa, alvo de toque ≥ 44px */
+.escala-grupo {
+  display: grid;
+  gap: var(--e-2);
+}
+
+.escala {
+  display: grid;
+  gap: var(--e-1);
+}
+
+.escala--5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.escala--11 { grid-template-columns: repeat(11, minmax(0, 1fr)); }
+
+@media (max-width: 479px) {
+  .escala--11 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+.escala__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  border-radius: var(--raio-sm);
+  background: var(--campo-fundo);
+  box-shadow: inset 0 0 0 1px var(--campo-borda);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--texto-mudo);
+  cursor: pointer;
+  transition: box-shadow var(--t-rapido) ease-out, background-color var(--t-rapido) ease-out, color var(--t-rapido) ease-out;
+}
+
+.escala__item:hover {
+  color: var(--texto);
+  box-shadow: inset 0 0 0 1px var(--borda-hover);
+}
+
+.escala__item:has(:checked) {
+  color: var(--sobre-acento);
+  background: var(--acento);
+  box-shadow: inset 0 0 0 1px var(--acento);
+}
+
+.escala__item:has(:focus-visible) {
+  outline: 2px solid var(--anel-foco);
+  outline-offset: 2px;
+}
+
+.escala__entrada {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.escala__pontas {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--e-4);
+}
+
+/* ─── Feedback: resultados ───────────────────────────────── */
+
+.resultados {
+  display: grid;
+  gap: var(--e-6);
+}
+
+.resultados__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--e-4);
+}
+
+.resultados__filtro {
+  min-width: min(100%, 16rem);
+}
+
+.resultados__lista {
+  display: grid;
+  gap: var(--e-5);
+}
+
+.resultados__resumo {
+  max-width: var(--largura-texto);
+  color: var(--texto-mudo);
+}
+
+.resultados__resumo strong {
+  color: var(--texto);
+}
+
+.resultado {
+  display: grid;
+  gap: var(--e-5);
+}
+
+.resultado__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--e-2) var(--e-4);
+}
+
+.resultado__titulo {
+  max-width: 60ch;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--titulo-de);
+}
+
+.resultado__detalhe > summary {
+  width: fit-content;
+  font-size: var(--fs-pequeno);
+  color: var(--texto-mudo);
+  cursor: pointer;
+}
+
+.resultado__detalhe[open] > summary {
+  margin-bottom: var(--e-4);
+}
+
+.resultado__nota {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--e-2);
+  padding: var(--e-3) var(--e-4);
+  border-radius: var(--raio-sm);
+  background: var(--alerta-suave);
+}
+
+.resultado__nota-icone {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.125rem;
+  color: var(--alerta);
+}
+
+.resultado__textos {
+  display: grid;
+  gap: var(--e-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.resultado__texto {
+  padding: var(--e-3) var(--e-4);
+  border-radius: var(--raio-sm);
+  background: var(--superficie);
+  box-shadow: inset 0 0 0 1px var(--borda);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+/* Número de destaque da pergunta (média, NPS) */
+.figura {
+  display: grid;
+  gap: var(--e-1);
+}
+
+.figura__valor {
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--titulo-de);
+}
+
+.figura__complemento {
+  font-size: var(--fs-pequeno);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--texto-mudo);
+}
+
+/* Barras horizontais de uma série: tabela = visão acessível.
+   Barra ≤ 24px (aqui 12px), ponta arredondada 4px e base reta; trilho = passo claro do acento. */
+.barras {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-pequeno);
+}
+
+.barras__linha > * {
+  padding-block: var(--e-1);
+  vertical-align: middle;
+}
+
+/* Rótulos curtos (notas, grupos do NPS) numa linha só; rótulos longos (opções de múltipla
+   escolha) ganham uma coluna fixa e quebram por palavra. */
+.barras__rotulo {
+  width: 1%;
+  padding-right: var(--e-4);
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  color: var(--texto);
+}
+
+.barras--rotulos-longos .barras__rotulo {
+  width: 40%;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.barras__trilho {
+  width: 100%;
+}
+
+.barras__barra {
+  display: block;
+  width: var(--largura, 0%);
+  min-width: 2px;
+  height: 12px;
+  border-radius: 0 4px 4px 0;
+  background: var(--acento);
+  transition: width var(--t-padrao) var(--curva-expo);
+}
+
+.barras__linha--zero .barras__barra {
+  min-width: 0;
+  width: 0;
+}
+
+.barras__linha:hover .barras__barra {
+  background: var(--acento-claro);
+}
+
+.barras__valor {
+  padding-left: var(--e-3);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+  color: var(--texto);
+}
+
+.barras__qtd {
+  color: var(--texto-mudo);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barras__barra { transition: none; }
+}

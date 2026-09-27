@@ -1,4 +1,4 @@
-# Portal de Cultura — Frontend (Fases 10, 11 e 12a: base, navegação, blocos e editor)
+# Portal de Cultura — Frontend (Fases 10, 11, 12a e 13: base, navegação, blocos, editor e módulos)
 
 HTML/CSS/JS vanilla com módulos ES nativos. Sem build: a pasta é publicada como está na Vercel.
 
@@ -27,7 +27,7 @@ Módulos ES não funcionam abrindo o arquivo direto (`file://`).
 | `js/ui/*` | DOM seguro, ícones, tema, toast, modal, carregamento, efeitos |
 | `js/rotas.js` | Rotas por hash: `#/` (início), `#/<slug>` (página) e `#/editar[/<id>]` (editor) |
 | `js/navegacao.js` | Menu montado a partir de `paginas`; marca a página aberta |
-| `js/paginas.js` | Início em grade bento, páginas de conteúdo, módulos (em breve) e estados vazios |
+| `js/paginas.js` | Início em grade bento, páginas de conteúdo, páginas de módulo e estados vazios |
 | `js/blocos/renderizador.js` | O `switch(tipo)` dos 9 tipos de bloco; o editor vai reaproveitá-lo na prévia |
 | `js/blocos/markdown.js` | Markdown sanitizado (marked + DOMPurify, carregados só quando a página usa) |
 | `js/blocos/midia.js` | Imagens, vídeo e documento: allowlist de host no cliente, marcador se não carregar |
@@ -42,6 +42,13 @@ Módulos ES não funcionam abrindo o arquivo direto (`file://`).
 | `js/editor/campos.js`, `componentes.js` | Controles de formulário acessíveis, botões de ícone, selos |
 | `js/editor/catalogo.js` | Nomes, rótulos e ajudas por tipo; normalização de mídia (espelho de `Blocos.gs`) |
 | `js/editor/dados.js` | Rotas `editor_*`, validação da resposta e fila de escritas |
+| `js/modulos/modulos.js` | Registro dos módulos com tela (carregados sob demanda); os demais mostram "em breve" |
+| `js/modulos/abas.js` | Abas acessíveis (setas, Home/End); lembra a última aba na sessão |
+| `js/modulos/feedback/feedback.js` | Módulo feedback: abas Responder e Resultados conforme as permissões |
+| `js/modulos/feedback/formulario.js` | Formulário anônimo: escala 1–5, NPS 0–10, múltipla e texto; rascunho só em memória |
+| `js/modulos/feedback/resultados.js` | Resultados agregados por ciclo (k-anonimato), barras em tabela acessível |
+| `js/modulos/feedback/dados.js` | Rotas `feedback_*` e validação das respostas do servidor |
+| `css/modulos.css` | Estilos dos módulos (só tokens) |
 | `css/editor.css` | Estilos do editor (só tokens) |
 | `css/paginas.css` | Estilos do menu, páginas e blocos (só tokens: tema claro/escuro continua valendo) |
 | `css/tokens.css` | Todos os tokens (escuro e claro). Trocar o acento: 3 linhas aqui |
@@ -76,6 +83,16 @@ Quem tem papel `admin` vê **Editar portal** no topo (e **Editar esta página** 
   corrigidas por lá. Linhas **sem id** só podem ser corrigidas na planilha.
 - O editor é só atalho visual: **quem decide é o servidor** (papel `admin` em toda rota
   `editor_*`, mesmos contratos de `Blocos.gs`, auditoria nominal de cada alteração).
+
+## Módulos (Fase 13)
+Uma página com tipo **módulo** mostra um recurso pronto do portal. Com tela:
+- **Feedback anônimo** (`feedback`): quem responde (config `feedback_papeis_respondem`) vê o
+  formulário do ciclo; quem vê resultados (`feedback_resultados_papeis`) vê a aba Resultados,
+  com seletor de ciclo. Recorte com menos de `k_minimo` respostas não mostra números.
+  Respostas e rascunhos nunca vão para cache, IndexedDB ou log; resultados vêm sempre da rede.
+
+Os demais módulos (enquetes, marcos, análise de consultas, administração) seguem com
+"abre em breve" até ganharem tela.
 
 ## Conteúdo pela planilha (continua valendo, em paralelo)
 - Uma linha em `paginas` = uma seção no menu e um cartão no início. `icone` aceita:
