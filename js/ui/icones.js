@@ -37,6 +37,38 @@ const ICONES = Object.freeze({
     ['circle', { cx: '9', cy: '9', r: '2' }], ['path', { d: 'm21 15-5-5L5 21' }],
   ],
 
+  // Editor
+  lapis: [['path', { d: 'M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z' }]],
+  lixeira: [
+    ['path', { d: 'M3 6h18' }], ['path', { d: 'M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6' }],
+    ['path', { d: 'M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2' }],
+  ],
+  'seta-cima': [['path', { d: 'm18 15-6-6-6 6' }]],
+  'seta-baixo': [['path', { d: 'm6 9 6 6 6-6' }]],
+  voltar: [['path', { d: 'm15 18-6-6 6-6' }]],
+  mais: [['path', { d: 'M12 5v14' }], ['path', { d: 'M5 12h14' }]],
+  olho: [['path', { d: 'M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z' }], ['circle', { cx: '12', cy: '12', r: '3' }]],
+  'olho-fechado': [
+    ['path', { d: 'M9.88 9.88a3 3 0 1 0 4.24 4.24' }],
+    ['path', { d: 'M10.73 5.08A10.4 10.4 0 0 1 12 5c7 0 10 7 10 7a13.2 13.2 0 0 1-1.67 2.68' }],
+    ['path', { d: 'M6.61 6.61A13.5 13.5 0 0 0 2 12s3 7 10 7a9.7 9.7 0 0 0 5.39-1.61' }],
+    ['path', { d: 'm2 2 20 20' }],
+  ],
+  ajustes: [
+    ['path', { d: 'M4 21v-7' }], ['path', { d: 'M4 10V3' }], ['path', { d: 'M12 21v-9' }], ['path', { d: 'M12 8V3' }],
+    ['path', { d: 'M20 21v-5' }], ['path', { d: 'M20 12V3' }], ['path', { d: 'M1 14h6' }], ['path', { d: 'M9 8h6' }],
+    ['path', { d: 'M17 16h6' }],
+  ],
+  texto: [['path', { d: 'M17 10H3' }], ['path', { d: 'M21 6H3' }], ['path', { d: 'M21 14H3' }], ['path', { d: 'M17 18H3' }]],
+  cartao: [
+    ['rect', {
+      x: '3', y: '3', width: '18', height: '18', rx: '2',
+    }],
+    ['path', { d: 'M3 9h18' }],
+  ],
+  usuario: [['path', { d: 'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2' }], ['circle', { cx: '12', cy: '7', r: '4' }]],
+  'linha-tempo': [['circle', { cx: '12', cy: '12', r: '3' }], ['path', { d: 'M12 3v6' }], ['path', { d: 'M12 15v6' }]],
+
   // Aceitos na coluna `icone` da aba `paginas`
   casa: [['path', { d: 'm3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z' }], ['path', { d: 'M9 22V12h6v10' }]],
   livro: [
@@ -65,6 +97,15 @@ const ICONES = Object.freeze({
     ['path', { d: 'm17 10 5-3v10l-5-3' }],
   ],
 });
+
+/**
+ * Ícones que uma página (item do menu) pode usar — os mesmos listados no LEIAME para a
+ * coluna `icone` da aba `paginas`.
+ * @type {ReadonlyArray<string>}
+ */
+export const ICONES_PAGINA = Object.freeze([
+  'casa', 'livro', 'pessoas', 'estrela', 'coracao', 'calendario', 'mensagem', 'escudo', 'grafico', 'video', 'documento',
+]);
 
 /**
  * @param {string} nome Nome do ícone (cai em `info` se não existir).

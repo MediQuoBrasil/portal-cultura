@@ -1,0 +1,768 @@
+/* ═══════════════════════════════════════════════════════════
+   Editor do portal ("estilo Wix") — só admin
+   Só tokens de tokens.css: tema claro/escuro e troca de acento
+   continuam valendo sem tocar aqui.
+   ═══════════════════════════════════════════════════════════ */
+
+/* Conteúdo redesenhado a cada ação: sem animação de entrada (não pisca ao mover um item) */
+.efeitos-ativos .editor [data-revelar],
+.efeitos-ativos .editor-previa [data-revelar] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* ─── Atalhos fora do editor ─────────────────────────────── */
+
+.pagina__cabecalho--com-acao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--e-4);
+}
+
+.estado__textos > .botao {
+  justify-self: start;
+  margin-top: var(--e-2);
+}
+
+@media (max-width: 767px) {
+  .topo__editor {
+    flex: 1 1 100%;
+  }
+}
+
+.topo__editor[aria-current="page"] {
+  box-shadow: inset 0 0 0 1px var(--borda-acento);
+}
+
+/* ─── Estrutura das vistas ───────────────────────────────── */
+
+.editor {
+  display: grid;
+  gap: var(--e-6);
+  padding-block: var(--e-12) var(--e-16);
+}
+
+@media (min-width: 768px) {
+  .editor { padding-block: var(--e-16) var(--e-24); }
+}
+
+.editor__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--e-4) var(--e-6);
+}
+
+.editor__titulos {
+  display: grid;
+  gap: var(--e-3);
+  min-width: 0;
+}
+
+.editor__lead {
+  max-width: 62ch;
+}
+
+.editor__acoes-cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-2);
+}
+
+.editor__voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-1);
+  justify-self: start;
+  font-size: var(--fs-pequeno);
+  color: var(--texto-mudo);
+  text-decoration: none;
+  transition: color var(--t-rapido) ease-out;
+}
+
+.editor__voltar:hover {
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.editor__voltar-icone {
+  width: 1rem;
+  height: 1rem;
+}
+
+.botao--acao-perigo:hover:not(:disabled) {
+  color: var(--perigo);
+  background: var(--perigo-suave);
+}
+
+/* ─── Aviso ──────────────────────────────────────────────── */
+
+.editor-aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--e-3);
+  padding: var(--e-4) var(--e-5);
+  background: var(--alerta-suave);
+  font-size: var(--fs-pequeno);
+}
+
+@media (min-width: 768px) {
+  .editor-aviso { padding: var(--e-4) var(--e-5); }
+}
+
+.editor-aviso__icone {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--alerta);
+}
+
+/* ─── Menu do portal (lista de páginas) ──────────────────── */
+
+.editor-lista {
+  display: grid;
+  gap: var(--e-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.editor-item {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--e-4);
+  padding: var(--e-4) var(--e-5);
+}
+
+@media (min-width: 768px) {
+  .editor-item { padding: var(--e-4) var(--e-5); }
+}
+
+.editor-item--rascunho {
+  background: transparent;
+  box-shadow: none;
+  outline: 1px dashed var(--borda-hover);
+  outline-offset: -1px;
+}
+
+.editor-item--rascunho .editor-item__titulo {
+  color: var(--texto-mudo);
+}
+
+.editor-ordem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.editor-item__icone {
+  color: var(--texto-mudo);
+}
+
+.editor-item__textos {
+  display: grid;
+  gap: var(--e-1);
+  min-width: 0;
+}
+
+.editor-item__titulo {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.editor-item__meta {
+  overflow: hidden;
+  font-family: var(--fonte-mono);
+  font-size: var(--fs-rotulo);
+  color: var(--texto-mudo);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.editor-item__selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-1);
+}
+
+.editor-item__selos:empty {
+  display: none;
+}
+
+.editor-item__problema {
+  font-size: 0.8125rem;
+  color: var(--perigo);
+}
+
+.editor-item__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--e-1);
+}
+
+.editor-item__acoes .botao--primario {
+  margin-right: var(--e-2);
+}
+
+@media (max-width: 767px) {
+  .editor-item {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--e-3);
+  }
+
+  .editor-item__icone {
+    display: none;
+  }
+
+  .editor-item__acoes {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    padding-top: var(--e-2);
+    border-top: 1px solid var(--borda);
+  }
+
+  .editor-item__acoes .botao--primario {
+    flex: 1 1 100%;
+    margin: 0 0 var(--e-1);
+  }
+}
+
+/* ─── Página: modos e blocos ─────────────────────────────── */
+
+.editor-modos {
+  display: inline-flex;
+  justify-self: start;
+  gap: 2px;
+  padding: 3px;
+  border-radius: calc(var(--raio-sm) + 3px);
+  background: var(--superficie);
+  box-shadow: inset 0 0 0 1px var(--borda);
+}
+
+.editor-modos__botao {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-2);
+  min-height: 2.25rem;
+  padding: 0 var(--e-3);
+  font-size: var(--fs-pequeno);
+  font-weight: 500;
+  color: var(--texto-mudo);
+  background: transparent;
+  border: 0;
+  border-radius: var(--raio-sm);
+  cursor: pointer;
+  transition: color var(--t-rapido) ease-out, background-color var(--t-rapido) ease-out;
+}
+
+.editor-modos__botao:hover {
+  color: var(--texto);
+}
+
+.editor-modos__botao[aria-pressed="true"] {
+  color: var(--texto);
+  background: var(--fundo-elevado);
+  box-shadow: 0 0 0 1px var(--borda-hover), var(--realce-interno);
+}
+
+.editor-modos__botao .botao__icone {
+  width: 1rem;
+  height: 1rem;
+}
+
+.editor-blocos {
+  display: grid;
+  gap: var(--e-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* "Adicionar bloco aqui": uma linha fina com o botão no meio */
+.editor-inserir {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.editor-inserir::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--divisor);
+}
+
+.editor-inserir__botao {
+  position: relative;
+  background: var(--fundo-base);
+  box-shadow: inset 0 0 0 1px var(--borda);
+  color: var(--texto-mudo);
+  opacity: 0.75;
+}
+
+.editor-inserir__botao:hover,
+.editor-inserir__botao:focus-visible {
+  opacity: 1;
+  color: var(--texto);
+  box-shadow: inset 0 0 0 1px var(--borda-acento);
+}
+
+.editor-inserir--destaque {
+  padding: var(--e-10) var(--e-4);
+  border-radius: var(--raio-lg);
+  outline: 1px dashed var(--borda-hover);
+  outline-offset: -1px;
+}
+
+.editor-inserir--destaque::before {
+  display: none;
+}
+
+.editor-bloco {
+  display: grid;
+  gap: var(--e-4);
+  padding: var(--e-3) var(--e-3) var(--e-5);
+  border-radius: var(--raio-lg);
+  box-shadow: 0 0 0 1px var(--borda);
+  transition: box-shadow var(--t-rapido) ease-out;
+}
+
+.editor-bloco:hover,
+.editor-bloco:focus-within {
+  box-shadow: 0 0 0 1px var(--borda-acento);
+}
+
+.editor-bloco--rascunho {
+  box-shadow: none;
+  outline: 1px dashed var(--borda-hover);
+  outline-offset: -1px;
+}
+
+.editor-bloco--rascunho .editor-bloco__conteudo {
+  opacity: 0.55;
+}
+
+.editor-bloco--erro {
+  box-shadow: 0 0 0 1px var(--perigo);
+}
+
+.editor-bloco__barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-2);
+  padding-left: var(--e-2);
+}
+
+.editor-bloco__tipo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-2);
+  font-family: var(--fonte-mono);
+  font-size: var(--fs-rotulo);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--texto-mudo);
+}
+
+.editor-bloco__tipo-icone {
+  width: 1rem;
+  height: 1rem;
+}
+
+.editor-bloco__selos {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: var(--e-1);
+}
+
+.editor-bloco__acoes {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.editor-bloco__conteudo {
+  padding-inline: var(--e-2);
+}
+
+.editor-bloco__erro {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--e-3);
+  padding: var(--e-4);
+  border-radius: var(--raio-sm);
+  background: var(--perigo-suave);
+  font-size: var(--fs-pequeno);
+}
+
+.editor-bloco__erro-icone {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--perigo);
+}
+
+/* Blocos grandes (hero de imagem, destaque) dentro da moldura continuam legíveis */
+.editor-bloco__conteudo > .bloco,
+.editor-bloco__conteudo > .grade,
+.editor-bloco__conteudo > .linha-tempo {
+  margin: 0;
+}
+
+/* ─── Painel (formulários) ───────────────────────────────── */
+
+.painel.modal--largo {
+  width: min(72rem, calc(100vw - 2rem));
+}
+
+.painel__cartao {
+  gap: var(--e-5);
+  padding-bottom: 0;
+}
+
+.painel__campos {
+  display: grid;
+  gap: var(--e-5);
+  align-content: start;
+  min-width: 0;
+}
+
+.painel__erro {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--e-2);
+  padding: var(--e-3) var(--e-4);
+  border-radius: var(--raio-sm);
+  background: var(--perigo-suave);
+  color: var(--perigo);
+  font-size: var(--fs-pequeno);
+}
+
+.painel__erro-icone {
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.painel__acoes {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  margin-inline: calc(var(--e-6) * -1);
+  padding: var(--e-4) var(--e-6) var(--e-6);
+  background: var(--fundo-elevado);
+  border-top: 1px solid var(--borda);
+}
+
+@media (min-width: 768px) {
+  .painel__acoes {
+    margin-inline: calc(var(--e-8) * -1);
+    padding: var(--e-4) var(--e-8) var(--e-8);
+  }
+}
+
+.painel__avancado > summary {
+  width: fit-content;
+  font-size: var(--fs-pequeno);
+  color: var(--texto-mudo);
+  cursor: pointer;
+}
+
+.painel__avancado[open] > summary {
+  margin-bottom: var(--e-4);
+}
+
+@media (max-width: 639px) {
+  .painel,
+  .painel.modal--largo {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 100dvh;
+    margin: 0;
+  }
+
+  .painel .modal__cartao {
+    min-height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+}
+
+/* Formulário do bloco: campos à esquerda, prévia ao vivo à direita */
+.editor-bloco-form {
+  display: grid;
+  gap: var(--e-6);
+}
+
+@media (min-width: 960px) {
+  .editor-bloco-form {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
+}
+
+.editor-previa {
+  display: grid;
+  gap: var(--e-3);
+  padding: var(--e-5);
+  border-radius: var(--raio-lg);
+  background: var(--fundo-base);
+  box-shadow: inset 0 0 0 1px var(--borda);
+}
+
+@media (min-width: 960px) {
+  .editor-previa {
+    position: sticky;
+    top: 0;
+  }
+}
+
+.editor-previa__conteudo {
+  gap: var(--e-6);
+  min-width: 0;
+}
+
+.editor-previa__vazia {
+  padding-block: var(--e-8);
+  text-align: center;
+}
+
+/* ─── Controles de formulário ────────────────────────────── */
+
+.campo-obrigatorio {
+  font-weight: 400;
+  color: var(--texto-mudo);
+}
+
+.campo-status {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+  font-size: 0.8125rem;
+}
+
+.campo-status:empty {
+  display: none;
+}
+
+.campo-status--ok { color: var(--sucesso); }
+.campo-status--erro { color: var(--alerta); }
+
+.campo-status__icone {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+}
+
+.campo-erro:empty {
+  display: none;
+}
+
+select.campo {
+  cursor: pointer;
+}
+
+.escolhas {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.escolhas > .campo-rotulo {
+  margin-bottom: var(--e-2);
+  padding: 0;
+}
+
+.escolhas__itens {
+  display: grid;
+  gap: var(--e-2);
+}
+
+.escolha {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--e-3);
+  padding: var(--e-3);
+  border-radius: var(--raio-sm);
+  background: var(--campo-fundo);
+  box-shadow: inset 0 0 0 1px var(--campo-borda);
+  font-size: var(--fs-pequeno);
+  cursor: pointer;
+  transition: box-shadow var(--t-rapido) ease-out, background-color var(--t-rapido) ease-out;
+}
+
+.escolha:hover {
+  box-shadow: inset 0 0 0 1px var(--borda-hover);
+}
+
+.escolha:has(:checked) {
+  background: rgba(var(--acento-rgb), 0.08);
+  box-shadow: inset 0 0 0 1px var(--borda-acento);
+}
+
+.escolha:has(:focus-visible) {
+  outline: 2px solid var(--anel-foco);
+  outline-offset: 2px;
+}
+
+.escolha__entrada {
+  flex-shrink: 0;
+  margin: 0.125rem 0 0;
+  accent-color: var(--acento);
+}
+
+.escolha__entrada:focus-visible {
+  outline: none;
+}
+
+.escolhas--grade .escolhas__itens {
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+}
+
+.escolhas--icones .escolhas__itens {
+  grid-template-columns: repeat(auto-fill, minmax(2.75rem, 1fr));
+}
+
+.escolhas--icones .escolha {
+  justify-content: center;
+  align-items: center;
+  padding: var(--e-3) 0;
+  color: var(--texto-mudo);
+}
+
+.escolhas--icones .escolha:has(:checked) {
+  color: var(--texto);
+}
+
+.escolhas--icones .escolha__entrada {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.escolha__icone {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Interruptor (checkbox com role="switch") */
+.interruptor {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-3);
+  font-size: var(--fs-pequeno);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.interruptor__entrada {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.interruptor__trilho {
+  position: relative;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 1.5rem;
+  border-radius: var(--raio-total);
+  background: var(--superficie-hover);
+  box-shadow: inset 0 0 0 1px var(--borda-hover);
+  transition: background-color var(--t-rapido) ease-out;
+}
+
+.interruptor__trilho::after {
+  content: "";
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  background: var(--texto-mudo);
+  transition: transform var(--t-rapido) var(--curva-expo), background-color var(--t-rapido) ease-out;
+}
+
+.interruptor__entrada:checked + .interruptor__trilho {
+  background: var(--acento);
+  box-shadow: none;
+}
+
+.interruptor__entrada:checked + .interruptor__trilho::after {
+  transform: translateX(1rem);
+  background: var(--sobre-acento);
+}
+
+.interruptor__entrada:focus-visible + .interruptor__trilho {
+  outline: 2px solid var(--anel-foco);
+  outline-offset: 2px;
+}
+
+/* ─── Paleta de tipos de bloco ───────────────────────────── */
+
+.paleta {
+  display: grid;
+  gap: var(--e-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .paleta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.paleta__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--e-3);
+  width: 100%;
+  height: 100%;
+  padding: var(--e-4);
+  text-align: left;
+  color: var(--texto);
+  background: var(--superficie);
+  border: 0;
+  border-radius: var(--raio-sm);
+  box-shadow: inset 0 0 0 1px var(--borda);
+  cursor: pointer;
+  transition: background-color var(--t-rapido) ease-out, box-shadow var(--t-rapido) ease-out;
+}
+
+.paleta__item:hover {
+  background: var(--superficie-hover);
+  box-shadow: inset 0 0 0 1px var(--borda-acento);
+}
+
+.paleta__item .icone-caixa {
+  flex-shrink: 0;
+}
+
+.paleta__textos {
+  display: grid;
+  gap: var(--e-1);
+}
+
+.paleta__nome {
+  font-weight: 600;
+}
+
+.paleta__descricao {
+  font-size: var(--fs-pequeno);
+  color: var(--texto-mudo);
+}

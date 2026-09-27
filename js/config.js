@@ -106,6 +106,11 @@ export const MAPA_INVALIDACAO = Object.freeze({
   analise_reuniao_criar: Object.freeze([]),
   analise_caso_upload: Object.freeze([]),
   analise_caso_atualizar: Object.freeze([]),
+  editor_pagina_salvar: Object.freeze(['paginas']),
+  editor_pagina_excluir: Object.freeze(['paginas']),
+  editor_bloco_salvar: Object.freeze(['paginas']),
+  editor_bloco_excluir: Object.freeze(['paginas']),
+  editor_reordenar: Object.freeze(['paginas']),
 });
 
 /**

@@ -16,7 +16,7 @@ import { iniciais, primeiroNome } from './util.js';
 /** Texto do hero por papel: o que a pessoa encontra aqui, dito do ponto de vista dela. */
 const TEXTO_HERO = Object.freeze({
   profissional: 'Aqui estão a nossa história, os protocolos de atendimento e os canais para você falar com a liderança.',
-  admin: 'Veja o portal como os profissionais veem e cuide das enquetes, dos envios e da publicação.',
+  admin: 'Veja o portal como os profissionais veem. Em Editar portal, você cria menus e monta as páginas sem abrir a planilha.',
   ceo: 'Veja o portal como os profissionais veem e acompanhe a análise mensal de consultas.',
 });
 
@@ -43,6 +43,7 @@ const elementos = () => ({
   hero: exigirElemento('heroTitulo').closest('.hero'),
   heroTitulo: exigirElemento('heroTitulo'),
   heroTexto: exigirElemento('heroTexto'),
+  linkEditor: exigirElemento('linkEditor'),
 });
 
 /**
@@ -143,8 +144,10 @@ export const definirHeroVisivel = (visivel) => {
  */
 export const renderizarUsuario = (perfil) => {
   const {
-    avatar, nome, papel, heroTitulo, heroTexto,
+    avatar, nome, papel, heroTitulo, heroTexto, linkEditor,
   } = elementos();
+  // Só esconde/mostra o atalho: quem pode editar é decidido pelo servidor em cada ação.
+  linkEditor.toggleAttribute('hidden', !(perfil.permissoes && perfil.permissoes.administrar === true));
   definirTexto(avatar, iniciais(perfil.nome));
   definirTexto(nome, perfil.nome || 'Profissional');
   definirTexto(papel, ROTULOS_PAPEL[perfil.papel] || '');
