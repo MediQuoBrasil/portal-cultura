@@ -5,6 +5,7 @@
  *
  *   #/          → hero + grade bento com as seções do portal
  *   #/<slug>    → página `conteudo` (blocos) ou `modulo` (feedback, enquetes… — Fase 12)
+ *   #/editar…   → editor do portal (só admin; ver editor/editor.js)
  *   outro slug  → "página não encontrada" (inclui página sem permissão: o servidor nem a envia)
  *
  * Renderizações concorrentes (troca rápida de rota enquanto o Markdown carrega) são
@@ -13,8 +14,9 @@
 
 import { marcarPaginaAtual, renderizarNavegacao } from './navegacao.js';
 import { renderizarBlocos } from './blocos/renderizador.js';
+import { abrirEditor, editorAtivo, fecharEditor } from './editor/editor.js';
 import { logErro } from './log.js';
-import { ouvirRotas, rotaAtual } from './rotas.js';
+import { hashDaRota, ouvirRotas, rotaAtual } from './rotas.js';
 import { definirHeroVisivel, fecharMenu } from './shell.js';
 import { criarElemento, exigirElemento } from './ui/dom.js';
 import { reiniciarParallax, revelar } from './ui/efeitos.js';
@@ -47,6 +49,7 @@ import { ehObjeto } from './util.js';
  * @property {string} titulo Frase curta do estado.
  * @property {string} texto Orientação do que fazer.
  * @property {string} [icone='info'] Ícone.
+ * @property {?HTMLElement} [acao] Botão/link de ação (ex.: abrir o editor).
  */
 
 const TITULO_DOCUMENTO = 'Portal de Cultura | MediQuo';
@@ -106,7 +109,9 @@ export const classesBento = (total) => {
  * @param {TextoEstado} opcoes Textos do estado.
  * @returns {HTMLElement} Cartão de estado (vazio, erro, em breve).
  */
-const criarEstado = ({ titulo, texto, icone = 'info' }) => criarElemento('div', {
+const criarEstado = ({
+  titulo, texto, icone = 'info', acao = null,
+}) => criarElemento('div', {
   classe: 'cartao estado',
   atributos: { 'data-revelar': '' },
   filhos: [
@@ -116,6 +121,7 @@ const criarEstado = ({ titulo, texto, icone = 'info' }) => criarElemento('div', 
       filhos: [
         criarElemento('p', { classe: 'estado__titulo', texto: titulo }),
         criarElemento('p', { classe: 'texto-mudo', texto }),
+        acao,
       ],
     }),
   ],
@@ -128,6 +134,17 @@ const criarEstado = ({ titulo, texto, icone = 'info' }) => criarElemento('div', 
 const podeEditar = (snapshot) => snapshot.me.permissoes.administrar === true;
 
 /**
+ * @param {?string} paginaId Página a editar (null = menu do portal).
+ * @param {string} rotulo Texto do botão.
+ * @returns {HTMLElement} Link para o editor.
+ */
+const criarLinkEditor = (paginaId, rotulo) => criarElemento('a', {
+  classe: 'botao botao--secundario botao--sm',
+  atributos: { href: hashDaRota({ nome: 'editor', paginaId }) },
+  filhos: [criarIcone('lapis', 'botao__icone'), criarElemento('span', { classe: 'botao__rotulo', texto: rotulo })],
+});
+
+/**
  * @param {ConteudoPortal} conteudo Conteúdo.
  * @param {Snapshot} snapshot Snapshot.
  * @returns {HTMLElement} Seções do portal em grade bento.
@@ -137,7 +154,8 @@ const criarInicio = (conteudo, snapshot) => {
     return criarEstado(podeEditar(snapshot)
       ? {
         titulo: 'O portal ainda não tem seções.',
-        texto: 'Acrescente uma linha na aba paginas da planilha (com visivel marcado) e use Portal de Cultura › Publicar alterações.',
+        texto: 'Crie a primeira em Editar portal, no topo da página.',
+        acao: criarLinkEditor(null, 'Abrir o editor'),
       }
       : {
         titulo: 'As seções do portal estão sendo preparadas.',
@@ -169,15 +187,19 @@ const criarInicio = (conteudo, snapshot) => {
 
 /**
  * @param {string} titulo Título da página.
+ * @param {?HTMLElement} [acao] Ação ao lado do título (ex.: "Editar esta página", só admin).
  * @returns {HTMLElement} Cabeçalho com o h1 (alvo de foco na troca de rota).
  */
-const criarCabecalho = (titulo) => criarElemento('header', {
-  classe: 'pagina__cabecalho',
-  filhos: [criarElemento('h1', {
-    classe: 'titulo-1 texto-gradiente pagina__titulo',
-    texto: titulo,
-    atributos: { id: 'tituloPagina', tabindex: '-1' },
-  })],
+const criarCabecalho = (titulo, acao = null) => criarElemento('header', {
+  classe: ['pagina__cabecalho', acao ? 'pagina__cabecalho--com-acao' : ''],
+  filhos: [
+    criarElemento('h1', {
+      classe: 'titulo-1 texto-gradiente pagina__titulo',
+      texto: titulo,
+      atributos: { id: 'tituloPagina', tabindex: '-1' },
+    }),
+    acao,
+  ],
 });
 
 /**
@@ -188,9 +210,10 @@ const criarCabecalho = (titulo) => criarElemento('header', {
  */
 const criarModulo = (pagina, snapshot) => criarEstado(pagina.modulo === 'admin' && podeEditar(snapshot)
   ? {
-    titulo: 'O editor do portal está em construção.',
-    texto: 'Até lá, edite pelas abas paginas e blocos da planilha e use Portal de Cultura › Publicar alterações.',
+    titulo: 'Menus e conteúdo do portal se editam no editor.',
+    texto: 'Crie páginas, ordene o menu e monte cada página com blocos, sem abrir a planilha.',
     icone: 'estrela',
+    acao: criarLinkEditor(null, 'Abrir o editor'),
   }
   : {
     titulo: 'Esta seção abre em breve.',
@@ -205,8 +228,9 @@ const criarModulo = (pagina, snapshot) => criarEstado(pagina.modulo === 'admin' 
  */
 const criarPaginaVazia = (pagina, snapshot) => criarEstado(podeEditar(snapshot)
   ? {
-    titulo: 'Esta página ainda não tem blocos visíveis.',
-    texto: `Na aba blocos, acrescente linhas com pagina_id ${pagina.id} e visivel marcado. Linhas com erro de preenchimento aparecem no log do Apps Script.`,
+    titulo: 'Esta página ainda não tem blocos publicados.',
+    texto: 'Monte o conteúdo no editor. Blocos em rascunho ou com erro aparecem só lá.',
+    acao: criarLinkEditor(pagina.id, 'Editar esta página'),
   }
   : {
     titulo: 'O conteúdo desta seção está sendo preparado.',
@@ -239,6 +263,18 @@ const pintarRota = async (rota, { focar }) => {
   estado.geracao += 1;
   const { geracao } = estado;
   const area = exigirElemento('areaPagina');
+  if (rota.nome !== 'editor' && editorAtivo()) fecharEditor();
+  const linkEditor = document.getElementById('linkEditor');
+  if (linkEditor && rota.nome === 'editor') linkEditor.setAttribute('aria-current', 'page');
+  else if (linkEditor) linkEditor.removeAttribute('aria-current');
+  if (rota.nome === 'editor' && podeEditar(snapshot)) {
+    definirHeroVisivel(false);
+    marcarPaginaAtual(null);
+    document.title = `Editar portal | ${TITULO_DOCUMENTO}`;
+    if (focar) globalThis.scrollTo(0, 0);
+    await abrirEditor(area, rota);
+    return;
+  }
   const conteudo = extrairConteudo(snapshot.paginas);
   const pagina = conteudo && rota.nome === 'pagina' ? conteudo.paginas.find((p) => p.slug === rota.slug) : null;
 
@@ -268,7 +304,8 @@ const pintarRota = async (rota, { focar }) => {
         atributos: { 'aria-busy': 'true' },
         filhos: [criarElemento('div', { classe: 'esqueleto esqueleto--bloco' })],
       });
-      area.replaceChildren(criarCabecalho(pagina.titulo), blocos);
+      const acao = podeEditar(snapshot) && pagina.id ? criarLinkEditor(pagina.id, 'Editar esta página') : null;
+      area.replaceChildren(criarCabecalho(pagina.titulo, acao), blocos);
       const { fragmento, total } = await renderizarBlocos(pagina.blocos, {
         tiposAgrupaveis: conteudo.tiposAgrupaveis,
       });
@@ -314,6 +351,9 @@ export const renderizarPortal = async (snapshot) => {
   estado.assinatura = assinatura;
   const conteudo = extrairConteudo(snapshot.paginas);
   renderizarNavegacao(conteudo ? conteudo.paginas : []);
+  // No editor, a atualização do portal (após cada gravação) só refaz o menu: a vista do
+  // editor já foi redesenhada com a resposta do servidor e não pode perder foco nem painel.
+  if (rotaAtual().nome === 'editor' && editorAtivo()) return;
   await pintarRota(rotaAtual(), { focar: false });
 };
 
@@ -322,6 +362,7 @@ export const renderizarPortal = async (snapshot) => {
  * @returns {void}
  */
 export const limparPortal = () => {
+  fecharEditor();
   estado.snapshot = null;
   estado.assinatura = '';
   estado.geracao += 1;
